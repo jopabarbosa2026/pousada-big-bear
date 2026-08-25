@@ -99,7 +99,7 @@
   .burger span{width:26px;height:2px;background:var(--pinho);transition:.3s}
 
   /* ---------- HERO ---------- */
-  .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding-top:114px;padding-bottom:64px;overflow:hidden}
+  .hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;padding-top:116px;padding-bottom:64px;overflow:hidden}
   .hero-bg{position:absolute;inset:0;z-index:0}
   .hero-bg .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
   .hero-bg .slide.active{opacity:1}
@@ -118,6 +118,13 @@
   .hero h1 em{font-style:italic;color:#e9c9ac}
   .hero p.lead{font-size:1.2rem;max-width:34ch;color:rgba(255,255,255,.88);margin-bottom:30px;font-weight:500}
   .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+  /* selo de reputacao sobre o carrossel */
+  .bk-badge{display:flex;width:fit-content;align-items:center;gap:12px;background:rgba(246,241,231,.95);color:var(--pinho);
+    border-radius:14px;padding:10px 16px;margin-bottom:16px;box-shadow:0 14px 34px -12px rgba(0,0,0,.45);backdrop-filter:blur(4px)}
+  .bk-badge .bk-n{font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--cobre);line-height:1}
+  .bk-badge b{display:block;font-size:.92rem;line-height:1.25}
+  .bk-badge span{display:block;font-size:.75rem;opacity:.75;line-height:1.25}
+
   /* card selo 70m */
   .seal{
     background:rgba(246,241,231,.95);color:var(--pinho);border-radius:20px;padding:30px 30px 26px;
@@ -312,7 +319,7 @@
     .repbar .wrap{justify-content:center;text-align:center}
     .rep-div{display:none}
     .foot-grid{grid-template-columns:1fr}
-    .hero{padding-top:104px;padding-bottom:40px}
+    .hero{padding-top:106px;padding-bottom:40px}
     .rcard{width:300px}
     /* menu mobile */
     nav.mobile{position:fixed;inset:0;background:var(--pinho);z-index:150;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:28px;transform:translateX(100%);transition:.4s}
@@ -330,15 +337,15 @@
   <div class="topbar">
     <div class="wrap">
       <div class="tb-left">
-        <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2 0-.4 0-.5L8.8 6.7c-.2-.5-.4-.4-.6-.4H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.8.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2m0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2"/></svg>
+        <a href="tel:+5512996199997">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>
           (12) 9 9619-9997
         </a>
-        <a href="https://api.whatsapp.com/send?phone=5512996394583&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank">(12) 9 9639-4583</a>
+        <a href="tel:+5512996394583">(12) 9 9639-4583</a>
       </div>
       <div class="tb-right">
         <a href="https://www.instagram.com/pousada.bigbear/" target="_blank">@pousada.bigbear</a>
-        <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank">Atendimento</a>
+        <a href="#duvidas">Atendimento</a>
       </div>
     </div>
   </div>
@@ -358,7 +365,6 @@
         <a href="#depoimentos">Depoimentos</a>
       </nav>
       <div class="nav-cta">
-        <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank" class="btn btn-ghost">Falar no WhatsApp</a>
         <a href="https://hbook.hsystem.com.br/booking?companyId=5f5b7998ab41d420505d0da3" target="_blank" class="btn btn-primary">Reservar</a>
         <div class="burger" id="burger"><span></span><span></span><span></span></div>
       </div>
@@ -384,12 +390,18 @@
   <div class="hero-inner">
     <div class="wrap">
       <div>
+        <div class="bk-badge">
+          <div class="bk-n">9,4</div>
+          <div>
+            <b>Excelente</b>
+            <span>+647 avaliações no Booking.com</span>
+          </div>
+        </div>
         <span class="eyebrow">Campos do Jordão · SP</span>
         <h1>Uma pousada romântica e charmosa a apenas <em>70 metros</em> da Praça do Capivari</h1>
         <p class="lead">O coração gastronômico e turístico da cidade.</p>
         <div class="hero-actions">
-          <a href="https://hbook.hsystem.com.br/booking?companyId=5f5b7998ab41d420505d0da3" target="_blank" class="btn btn-primary">Reservar · até 10x sem juros</a>
-          <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank" class="btn btn-light">Orçamento pelo WhatsApp</a>
+          <a href="https://hbook.hsystem.com.br/booking?companyId=5f5b7998ab41d420505d0da3" target="_blank" class="btn btn-primary">Reservar · até 6x sem juros</a>
         </div>
       </div>
       <div class="seal reveal">
@@ -442,12 +454,11 @@
         <p>Imagine se hospedar numa pousada em que você coloca os pés para fora, caminha <b>70 metros — só isso</b> — e já chegou ao maior ponto turístico e gastronômico da cidade.</p>
         <p>Na Big Bear isso não é imaginação, é a mais pura realidade. Somos uma pousada <b>romântica e charmosa</b>, com atendimento cordial e hospitaleiro, feita para quem quer aproveitar a serra sem pressa.</p>
         <p>Some a isso um <b>café da manhã estilo brunch</b> servido das 8h às 11h, e você tem a receita de uma estadia inesquecível.</p>
-        <a href="https://api.whatsapp.com/send?phone=5512981529483&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank" class="btn btn-ghost" style="margin-top:8px">Quero uma experiência incrível →</a>
       </div>
       <div class="imgs reveal">
         <div class="im im1"><img data-role="about1" alt="Ambiente aconchegante da Pousada Big Bear"></div>
         <div class="im im2"><img data-role="about2" alt="Detalhe da pousada"></div>
-        <div class="badge"><b>Desde 2021</b><span>recebendo bem</span></div>
+        <div class="badge"><b>Desde 2001</b><span>recebendo bem</span></div>
       </div>
     </div>
   </div>
@@ -601,13 +612,13 @@
       <div class="lead-col reveal">
         <span class="eyebrow">Pagamento & Reserva</span>
         <h2>Flexível como uma boa viagem deve ser</h2>
-        <p>Descontos para reservas antecipadas e pagamento à vista, gratuidade para crianças de até 6 anos e parcelamento em até 10x sem juros ao reservar pelo site.</p>
+        <p>Descontos para reservas antecipadas e pagamento à vista, gratuidade para crianças de até 6 anos e parcelamento em até 6x sem juros ao reservar pelo site.</p>
         <div class="pay-badges">
           <span>Cartão de crédito</span>
           <span>Débito online</span>
           <span>Depósito bancário</span>
           <span>Dinheiro</span>
-          <span>Até 10x sem juros</span>
+          <span>Até 6x sem juros</span>
         </div>
         <div style="margin-top:28px">
           <a href="https://hbook.hsystem.com.br/booking?companyId=5f5b7998ab41d420505d0da3" target="_blank" class="btn btn-primary">Reservar agora</a>
@@ -648,7 +659,6 @@
     <p>10% OFF em uma diária, 15% em duas e 20% em três ou mais durante a semana. A serra espera por você.</p>
     <div class="hero-actions">
       <a href="https://hbook.hsystem.com.br/booking?companyId=5f5b7998ab41d420505d0da3" target="_blank" class="btn btn-primary">Reservar com desconto</a>
-      <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank" class="btn btn-light">Pedir orçamento no WhatsApp</a>
     </div>
   </div>
 </section>
@@ -665,7 +675,6 @@
         <p>Procurando um lugar para ficar em Campos do Jordão? Você acabou de encontrar: uma pousada romântica que oferece o melhor da cidade.</p>
         <div class="foot-social">
           <a href="https://www.facebook.com/bigbearpousada" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
-          <a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2 0-.4 0-.5L8.8 6.7c-.2-.5-.4-.4-.6-.4H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.8.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2"/></svg></a>
           <a href="https://www.instagram.com/pousada.bigbear/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
         </div>
       </div>
@@ -675,13 +684,11 @@
           <li><a href="#acomodacoes">Acomodações</a></li>
           <li><a href="#diferenciais">Diferenciais</a></li>
           <li><a href="#galeria">Galeria</a></li>
-          <li><a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank">Contato</a></li>
         </ul>
       </div>
       <div>
         <h4>Suporte</h4>
         <ul>
-          <li><a href="https://api.whatsapp.com/send?phone=5512996199997&text=Ol%C3%A1,%20eu%20estava%20no%20site%20da%20Big%20Bear%20e..." target="_blank">Atendimento</a></li>
           <li><a href="#duvidas">Perguntas frequentes</a></li>
           <li><a href="#duvidas">Política de cancelamento</a></li>
         </ul>
@@ -696,7 +703,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2021 Pousada Big Bear. Todos os direitos reservados.</span>
+      <span>© 2026 Pousada Big Bear. Todos os direitos reservados.</span>
       <span>Feito com carinho na serra da Mantiqueira.</span>
     </div>
   </div>
