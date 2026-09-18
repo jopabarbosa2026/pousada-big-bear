@@ -2,3 +2,6 @@
 Thumbs.db
 .vercel
 node_modules
+
+# Dados pessoais de hospedes - nunca versionar (o repo e publico no GitHub)
+Contatos/
