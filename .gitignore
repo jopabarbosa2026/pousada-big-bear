@@ -5,3 +5,10 @@ node_modules
 
 # Dados pessoais de hospedes - nunca versionar (o repo e publico no GitHub)
 Contatos/
+
+# Fotos originais (pesadas, vem da camera/drone). So os derivados em fotos/gal/
+# entram no repo - o original fica so na maquina do Joao.
+fotos/orig/
+
+# Folhas de contato: so para eu olhar as fotos em lote
+scripts/folhas/

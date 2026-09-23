@@ -178,7 +178,9 @@ página mantém o número da sua própria unidade.
    Na Big Bear 2 essa mesma afirmação foi retirada em 2026-09-02 por não
    existir — vale confirmar se na Big Bear 1 existe mesmo.
 4. **Avaliações do Booking.** Big Bear 1 diz 655 avaliações; Big Bear 2, 355.
-   Confirme se os dois números estão atualizados.
+   Confirme se os dois números estão atualizados. Desde 2026-09-23 os dois
+   selos aparecem lado a lado na hero da home, cada um com o nome da sua
+   unidade — número desatualizado agora fica visível na comparação.
 5. **Promoção sazonal.** A "Promoção de Inverno" (10% / 15% / 20% OFF) saiu do
    ar: estamos em setembro e o percentual de 20% nunca veio da pousada,
    conflitando com os 15% da reserva direta confirmados para a Big Bear 2.

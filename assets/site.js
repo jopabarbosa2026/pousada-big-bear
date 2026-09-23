@@ -43,7 +43,6 @@
       site: "big-bear"
     };
 
-    if (typeof gtag === "function") gtag("event", nome, dados);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(dados);
 
@@ -121,17 +120,17 @@
      depender deste script rodar. Os demais só recebem a foto quando chega a
      vez deles: todos ocupam a tela inteira, então dar src a todos de uma vez
      faz o navegador disputar banda com a foto que o visitante está esperando.
-     Slides com "slug" usam as versões AVIF/WebP de /fotos/otim/; os outros
-     carregam o arquivo de "src" direto. */
+     Cada slide traz "base" — o caminho da foto sem o sufixo de tamanho — e as
+     medidas dela; quem escreve essa lista é scripts/monta-hero.js. */
   var stage = document.getElementById("heroCarousel");
   var dotsEl = document.getElementById("heroDots");
   var lista = CFG.slides || [];
 
   if (stage && dotsEl && lista.length > 1) {
-    var LARGURAS = [480, 768, 1024];
-    var conjunto = function (slug, ext) {
-      return LARGURAS.map(function (w) {
-        return "/fotos/otim/" + slug + "-" + w + "." + ext + " " + w + "w";
+    var MEDIDAS_HERO = [480, 960, 1600];
+    var conjunto = function (base, ext) {
+      return MEDIDAS_HERO.map(function (w) {
+        return base + "-" + w + "." + ext + " " + w + "w";
       }).join(", ");
     };
 
@@ -140,20 +139,17 @@
       slide.className = "slide";
       var pic = document.createElement("picture");
       var avif = document.createElement("source"); avif.type = "image/avif";
-      var webp = document.createElement("source"); webp.type = "image/webp";
       var im = document.createElement("img");
-      im.alt = s.alt; im.width = 1024; im.height = 682; im.decoding = "async";
-      if (s.slug) { pic.append(avif, webp, im); } else { pic.append(im); }
+      im.alt = s.alt; im.width = s.w || 960; im.height = s.h || 640; im.decoding = "async";
+      pic.append(avif, im);
       slide.appendChild(pic);
       slide.carregar = function () {
         if (slide.carregada) return;
         slide.carregada = true;
-        if (s.slug) {
-          avif.sizes = webp.sizes = "100vw";
-          avif.srcset = conjunto(s.slug, "avif");
-          webp.srcset = conjunto(s.slug, "webp");
-        }
-        im.src = s.src;
+        avif.sizes = im.sizes = "100vw";
+        avif.srcset = conjunto(s.base, "avif");
+        im.srcset = conjunto(s.base, "webp");
+        im.src = s.base + "-960.webp";
       };
       return slide;
     };
@@ -210,5 +206,205 @@
         "</b><span>Hóspede verificado</span></div></div>" +
         "</div>";
     }).join("").repeat(2);
+  }
+
+  /* ===== CARROSSEL DOS CARDS DE UNIDADE ====================================
+     A primeira foto de cada card já vem no HTML (é ela que o visitante vê ao
+     rolar até aqui). As demais são criadas por JS e só baixam quando entram em
+     cena — dois carrosséis de seis fotos baixando tudo de uma vez custaria
+     banda no celular sem ninguém estar olhando. */
+  var PASTA = { "big-bear-1": "bb1", "big-bear-2": "bb2" };
+  var MEDIDAS_CARD = [480, 960];
+
+  function fonteGaleria(pasta, slug, ext, medidas) {
+    return medidas.map(function (w) {
+      return "/fotos/gal/" + pasta + "/" + slug + "-" + w + "." + ext + " " + w + "w";
+    }).join(", ");
+  }
+
+  Object.keys(CFG.carrosseis || {}).forEach(function (unidade) {
+    var car = document.querySelector('.uc-car[data-unidade="' + unidade + '"]');
+    var fotos = CFG.carrosseis[unidade] || [];
+    if (!car || fotos.length < 2) return;
+
+    var pasta = PASTA[unidade];
+    var dots = car.parentNode.querySelector(".uc-dots");
+    var slides = [car.querySelector(".uc-slide")];
+
+    fotos.slice(1).forEach(function (f) {
+      var slide = document.createElement("div");
+      slide.className = "uc-slide";
+      var pic = document.createElement("picture");
+      var avif = document.createElement("source"); avif.type = "image/avif";
+      var im = document.createElement("img");
+      im.alt = f.alt; im.width = 960; im.height = 640; im.decoding = "async"; im.loading = "lazy";
+      pic.append(avif, im);
+      slide.appendChild(pic);
+      slide.carregar = function () {
+        if (slide.carregada) return;
+        slide.carregada = true;
+        avif.sizes = im.sizes = "(max-width:860px) 100vw, 50vw";
+        avif.srcset = fonteGaleria(pasta, f.slug, "avif", MEDIDAS_CARD);
+        im.srcset = fonteGaleria(pasta, f.slug, "webp", MEDIDAS_CARD);
+        im.src = "/fotos/gal/" + pasta + "/" + f.slug + "-960.webp";
+      };
+      car.appendChild(slide);
+      slides.push(slide);
+    });
+
+    var pontos = [];
+    if (dots) {
+      slides.forEach(function (_, i) {
+        var b = document.createElement("button");
+        b.setAttribute("aria-label", "Foto " + (i + 1) + " de " + slides.length);
+        b.addEventListener("click", function () { ir(i, true); });
+        dots.appendChild(b);
+        pontos.push(b);
+      });
+      pontos[0].classList.add("active");
+    }
+
+    var atual = 0, relogio;
+    var parado = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* só troca quando a próxima foto já está decodificada: passar para um
+       slide ainda vazio deixa o card em branco por um instante. */
+    function ir(n, manual) {
+      var destino = (n + slides.length) % slides.length;
+      if (destino === atual) return;
+      var alvo = slides[destino];
+      if (alvo.carregar) alvo.carregar();
+
+      var trocar = function () {
+        slides[atual].classList.remove("active");
+        if (pontos[atual]) pontos[atual].classList.remove("active");
+        atual = destino;
+        alvo.classList.add("active");
+        if (pontos[atual]) pontos[atual].classList.add("active");
+        var prox = slides[(atual + 1) % slides.length];
+        if (prox.carregar) prox.carregar();
+        if (manual) recomecar();
+      };
+
+      var foto = alvo.querySelector("img");
+      if (foto && !foto.complete) {
+        foto.addEventListener("load", trocar, { once: true });
+        foto.addEventListener("error", trocar, { once: true });
+      } else {
+        trocar();
+      }
+    }
+    function recomecar() {
+      clearInterval(relogio);
+      if (!parado) relogio = setInterval(function () { ir(atual + 1); }, 6000);
+    }
+
+    car.parentNode.querySelectorAll(".uc-nav").forEach(function (b) {
+      b.addEventListener("click", function () { ir(atual + (b.classList.contains("uc-next") ? 1 : -1), true); });
+    });
+
+    /* só começa a girar quando o card aparece na tela */
+    if (typeof IntersectionObserver === "function") {
+      var obs = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { slides[1].carregar(); recomecar(); obs.disconnect(); }
+        });
+      }, { threshold: .25 });
+      obs.observe(car);
+    } else {
+      recomecar();
+    }
+  });
+
+  /* ===== GALERIA: filtros e "ver todas" ==================================== */
+  document.querySelectorAll(".gal-mais").forEach(function (botao) {
+    botao.addEventListener("click", function () {
+      var grade = document.getElementById(botao.dataset.grade);
+      if (!grade) return;
+      grade.classList.remove("encolhida");
+      botao.remove();
+    });
+  });
+
+  var filtros = document.querySelectorAll(".gal-filtros button");
+  filtros.forEach(function (botao) {
+    botao.addEventListener("click", function () {
+      filtros.forEach(function (b) { b.classList.toggle("ativo", b === botao); });
+      document.querySelectorAll(".gal-bloco").forEach(function (bloco) {
+        bloco.hidden = botao.dataset.filtro !== "todas" && bloco.dataset.unidade !== botao.dataset.filtro;
+      });
+    });
+  });
+
+  /* ===== LIGHTBOX ==========================================================
+     Cada miniatura guarda em data-base o caminho sem o sufixo de tamanho; a
+     versão de 1600px só é baixada quando a foto é aberta. */
+  var grades = document.querySelectorAll(".gal-fotos");
+  if (grades.length) {
+    var caixa = document.createElement("div");
+    caixa.className = "lbox";
+    caixa.setAttribute("role", "dialog");
+    caixa.setAttribute("aria-modal", "true");
+    caixa.setAttribute("aria-label", "Foto ampliada");
+    caixa.innerHTML =
+      '<button class="lb-btn lb-fechar" aria-label="Fechar">✕</button>' +
+      '<button class="lb-btn lb-prev" aria-label="Foto anterior">‹</button>' +
+      '<button class="lb-btn lb-next" aria-label="Próxima foto">›</button>' +
+      '<figure><picture><source class="lb-avif" type="image/avif">' +
+      '<img class="lb-img" alt="" decoding="async"></picture>' +
+      '<figcaption class="lb-legenda"></figcaption></figure>' +
+      '<div class="lb-contador"></div>';
+    document.body.appendChild(caixa);
+
+    var lbImg = caixa.querySelector(".lb-img");
+    var lbAvif = caixa.querySelector(".lb-avif");
+    var lbLegenda = caixa.querySelector(".lb-legenda");
+    var lbContador = caixa.querySelector(".lb-contador");
+    var itens = [], pos = 0, ultimoFoco = null;
+
+    function mostrar(i) {
+      pos = (i + itens.length) % itens.length;
+      var b = itens[pos];
+      lbAvif.srcset = b.dataset.base + "-1600.avif";
+      lbImg.src = b.dataset.base + "-1600.webp";
+      lbImg.alt = b.dataset.alt || "";
+      lbLegenda.textContent = b.dataset.alt || "";
+      lbContador.textContent = (pos + 1) + " / " + itens.length;
+      /* adianta a vizinha, para a seta não esperar o download */
+      var viz = itens[(pos + 1) % itens.length];
+      if (viz) new Image().src = viz.dataset.base + "-1600.webp";
+    }
+    function abrir(grade, botao) {
+      itens = Array.prototype.slice.call(grade.querySelectorAll(".gi"));
+      ultimoFoco = botao;
+      mostrar(itens.indexOf(botao));
+      caixa.classList.add("aberta");
+      document.body.classList.add("travada");
+      caixa.querySelector(".lb-fechar").focus();
+    }
+    function fechar() {
+      caixa.classList.remove("aberta");
+      document.body.classList.remove("travada");
+      lbImg.removeAttribute("src");
+      lbAvif.removeAttribute("srcset");
+      if (ultimoFoco) ultimoFoco.focus();
+    }
+
+    grades.forEach(function (grade) {
+      grade.addEventListener("click", function (e) {
+        var botao = e.target.closest(".gi");
+        if (botao) abrir(grade, botao);
+      });
+    });
+    caixa.querySelector(".lb-fechar").addEventListener("click", fechar);
+    caixa.querySelector(".lb-prev").addEventListener("click", function () { mostrar(pos - 1); });
+    caixa.querySelector(".lb-next").addEventListener("click", function () { mostrar(pos + 1); });
+    caixa.addEventListener("click", function (e) { if (e.target === caixa) fechar(); });
+    document.addEventListener("keydown", function (e) {
+      if (!caixa.classList.contains("aberta")) return;
+      if (e.key === "Escape") fechar();
+      if (e.key === "ArrowRight") mostrar(pos + 1);
+      if (e.key === "ArrowLeft") mostrar(pos - 1);
+    });
   }
 })();

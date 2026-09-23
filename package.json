@@ -1,0 +1,14 @@
+{
+  "name": "pousada-big-bear",
+  "private": true,
+  "description": "Site estatico das pousadas Big Bear 1 e 2. Os scripts so servem para preparar fotos e montar as galerias - o site em si nao tem build.",
+  "scripts": {
+    "fotos": "node scripts/otimiza-fotos.js",
+    "galeria": "node scripts/monta-galeria.js",
+    "cards": "node scripts/monta-cards.js",
+    "folhas": "node scripts/folhas-de-contato.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.2"
+  }
+}
