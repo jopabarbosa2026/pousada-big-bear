@@ -84,13 +84,29 @@
   var gatilho = document.querySelector(".wa-float .gatilho");
   var opcoes = document.querySelector(".wa-float .opcoes");
   if (gatilho && opcoes) {
+    /* O data-cta das opções diz de onde o visitante veio: do círculo flutuante
+       ou de um botão da página que abre o mesmo menu (data-abre-whatsapp). */
+    var abrirOpcoes = function (origem) {
+      opcoes.querySelectorAll("a").forEach(function (a) { a.dataset.cta = origem; });
+      opcoes.hidden = false;
+      gatilho.setAttribute("aria-expanded", "true");
+    };
     gatilho.addEventListener("click", function () {
-      var fechado = opcoes.hidden;
-      opcoes.hidden = !fechado;
-      gatilho.setAttribute("aria-expanded", String(fechado));
+      if (opcoes.hidden) {
+        abrirOpcoes("whatsapp-flutuante");
+      } else {
+        opcoes.hidden = true;
+        gatilho.setAttribute("aria-expanded", "false");
+      }
+    });
+    document.querySelectorAll("[data-abre-whatsapp]").forEach(function (botao) {
+      botao.addEventListener("click", function () {
+        abrirOpcoes(botao.getAttribute("data-abre-whatsapp"));
+        opcoes.querySelector("a").focus();
+      });
     });
     document.addEventListener("click", function (e) {
-      if (!e.target.closest(".wa-float")) {
+      if (!e.target.closest(".wa-float, [data-abre-whatsapp]")) {
         opcoes.hidden = true;
         gatilho.setAttribute("aria-expanded", "false");
       }
