@@ -19,13 +19,14 @@ const manifestos = {
   bb2: JSON.parse(fs.readFileSync(path.join(REPO, 'fotos/gal/bb2.json'), 'utf8')),
 };
 
-/* Ordem pedida pelo João: crepe doce, café da manhã, e daí revezando entre
-   quarto, academia e área comum. A academia fica na Big Bear 1, então só
-   entra no hero dela e no da home. */
+/* Ordem pedida pelo João: mesa de bolos do café, salão do café, e daí
+   revezando entre quarto, academia e área comum. A academia fica na Big Bear 1,
+   então só entra no hero dela e no da home. O crepe (bb2 205) saiu do hero a
+   pedido dele: a foto ficou estranha em tela cheia. */
 const ESCOLHAS = {
-  'index.html': [['bb2', 205], ['bb2', 186], ['bb1', 47], ['bb1', 25], ['bb2', 62], ['bb2', 104]],
+  'index.html': [['bb2', 143], ['bb2', 186], ['bb1', 47], ['bb1', 25], ['bb2', 62], ['bb2', 104]],
   'big-bear-1.html': [['bb1', 41], ['bb1', 47], ['bb1', 25], ['bb1', 77], ['bb1', 52]],
-  'big-bear-2.html': [['bb2', 205], ['bb2', 186], ['bb2', 104], ['bb2', 62], ['bb2', 81]],
+  'big-bear-2.html': [['bb2', 143], ['bb2', 186], ['bb2', 104], ['bb2', 62], ['bb2', 81]],
 };
 
 function foto(un, n) {

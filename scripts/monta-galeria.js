@@ -43,9 +43,34 @@ function item(un, foto, nome) {
   ].join('\n');
 }
 
+/* A grade abre encolhida (16 fotos no desktop, 8 no celular — assets/estilo.css),
+   e na ordem do manifesto as primeiras eram só fachada, academia e suíte. Então
+   as primeiras 16 revezam um ambiente de cada vez, nesta ordem de prioridade;
+   o resto segue na ordem do manifesto. Ambiente fora da lista entra depois. */
+const ABERTURA = 16;
+const PRIORIDADE = ['Suíte', 'Café', 'Recepção', 'Sala', 'Salão', 'Fachada', 'Academia', 'Entrada', 'Banheiro'];
+
+function ordemDeExibicao(un, fotos) {
+  const rank = (chave) => { const i = PRIORIDADE.indexOf(chave); return i === -1 ? PRIORIDADE.length : i; };
+  const grupos = new Map();
+  for (const f of fotos) {
+    const l = (legendas[un] && legendas[un][f.slug]) || '';
+    const chave = PRIORIDADE.find((p) => l.startsWith(p)) || l;
+    if (!grupos.has(chave)) grupos.set(chave, []);
+    grupos.get(chave).push(f);
+  }
+  const filas = [...grupos.entries()].sort(([a], [b]) => rank(a) - rank(b)).map(([, lista]) => lista);
+
+  const abertura = [];
+  for (let volta = 0; abertura.length < ABERTURA && filas.some((q) => q.length > volta); volta++) {
+    for (const q of filas) if (q[volta] && abertura.length < ABERTURA) abertura.push(q[volta]);
+  }
+  return abertura.concat(fotos.filter((f) => !abertura.includes(f)));
+}
+
 function grade(un, id) {
   const cfg = UNIDADES[un];
-  const fotos = manifesto(un);
+  const fotos = ordemDeExibicao(un, manifesto(un));
   return {
     total: fotos.length,
     html: [

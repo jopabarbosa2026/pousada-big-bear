@@ -18,6 +18,13 @@ const ORIG = path.join(REPO, 'fotos/orig');
 const LARGURAS = [480, 960, 1600];
 const CONCORRENCIA = 4;
 
+/* Recortes aplicados na original antes de redimensionar, em pixels da foto já
+   girada. Para refazer uma foto recortada, apague as versões dela em fotos/gal. */
+const RECORTES = {
+  /* o fotógrafo aparece refletido no espelho, à esquerda */
+  jv3a0059: { left: 1100, top: 500, width: 4900, height: 3267 },
+};
+
 const jpeg = (nome) => /\.jpe?g$/i.test(nome);
 
 /* aceita fotos/orig/bb1/*.jpg e também um nível de subpasta — é como o Drive exporta */
@@ -43,13 +50,15 @@ const slugificar = (arquivo) =>
 
 async function processar(origem, destino) {
   const slug = slugificar(origem);
-  const meta = await sharp(origem).rotate().metadata();
+  const recorte = RECORTES[slug];
+  const meta = recorte || await sharp(origem).rotate().metadata();
 
   for (const largura of LARGURAS) {
     for (const [fmt, opcoes] of [['avif', { quality: 50, effort: 4 }], ['webp', { quality: 76 }]]) {
       const saida = path.join(destino, `${slug}-${largura}.${fmt}`);
       if (fs.existsSync(saida)) continue;
-      await sharp(origem).rotate()
+      const girada = sharp(origem).rotate();
+      await (recorte ? girada.extract(recorte) : girada)
         .resize({ width: largura, withoutEnlargement: true })
         .toFormat(fmt, opcoes).toFile(saida);
     }
