@@ -46,6 +46,7 @@ Já publicado no site. A coluna de origem aponta onde o dado vive hoje.
 | Desconto de reserva direta | Até 15% | `content/beneficios.ts` |
 | Promoção sazonal vigente | Primavera, anunciada com "condições especiais para os feriados" (sem percentual definido). Trocada de "feriado" para "primavera" a pedido do proprietário em 2026-09-08. Hero anuncia parcelamento "em até 6x sem juros" — dado passado direto pelo proprietário em 2026-09-04, ainda não passou pela validação geral de formas de pagamento abaixo | `content/hero.ts` |
 | Nota Booking.com | 9,4 "Fantástico", 355 avaliações | `content/hero.ts` |
+| Nota de localização no Booking.com | 9,9 — informada pelo João em 2026-09-24 para as duas unidades | selo na hero de `index.html` e `big-bear-2.html` |
 | Nota Tripadvisor | 4,8/5 | `content/depoimentos.ts` |
 | Suítes | Deluxe (casal) · Deluxe Executivo (casal + solteiro) · Deluxe Executiva Conjugada (família) | `content/acomodacoes.ts` |
 | Configuração comum às três suítes | Cama queen, Wi-Fi, frigobar, ar-condicionado, TV | `content/acomodacoes.ts` |
@@ -157,6 +158,7 @@ Trate como "publicado, a confirmar", não como fonte de verdade.
 | Academia e sauna | Ficam nesta unidade; atendem também os hóspedes da Big Bear 2, sem agendamento e sem custo (**este ponto é o único confirmado**, consta na seção da Big Bear 2) |
 | Suítes | Luxo (varanda, cama de casal, Smart TV 50") · Master (casal + solteiro, hidromassagem cortesia) · Superior (38m², banheira de hidromassagem, mesa e sofá, ducha efeito chuva) |
 | Notas | Booking 9.4 "Fantástico" 655 avaliações · TripAdvisor 4,5 "Excelente" 250 avaliações · Trivago 9.0 "Fantástico" 26 avaliações |
+| Nota de localização no Booking | 9,9 — informada pelo João em 2026-09-24 (**esta confirmada**), selo na hero de `index.html` e `big-bear-1.html` |
 | Cancelamento | Até 7 dias reembolso integral · até 14 dias parcial · após 14 dias vira carta de crédito |
 | Crianças | Até 6 anos não pagam (berço por taxa única) · 7 a 12 anos pagam 25% · a partir de 13 anos, 40% |
 | Cartões | Aceita as bandeiras comuns (MasterCard, Elo). Não aceita American Express nem Hipercard |
