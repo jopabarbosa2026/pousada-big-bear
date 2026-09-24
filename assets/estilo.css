@@ -120,7 +120,9 @@ nav.main a:hover::after{width:100%}
 @media(min-width:981px){.hero-inner .wrap{position:relative}
   .bk-seals{position:absolute;right:28px;bottom:calc(100% + 22px);z-index:3;margin:0}
   .bk-seal{width:134px}}
-@media(max-width:400px){.bk-seals{gap:12px}.bk-seal{width:104px}}
+/* no celular os selos ficam centralizados e dividem a largura da tela */
+@media(max-width:980px){.bk-seals{justify-content:center}}
+@media(max-width:480px){.bk-seals{gap:12px}.bk-seal{width:auto;flex:0 1 112px}}
 
 /* card selo 70m */
 .seal{
@@ -286,7 +288,7 @@ footer ul a:hover{color:var(--cobre-claro)}
 
 /* ---------- RESPONSIVO ---------- */
 @media(max-width:980px){
-  .hero-inner .wrap{grid-template-columns:1fr}
+  .hero-inner .wrap{grid-template-columns:minmax(0,1fr)}
   .seal{max-width:380px}
   .about .grid{grid-template-columns:1fr;gap:40px}
   .about .imgs{height:420px;max-width:460px}
