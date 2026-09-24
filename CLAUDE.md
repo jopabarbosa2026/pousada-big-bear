@@ -33,6 +33,9 @@ informação não estiver naquele arquivo, ela não foi confirmada: escreva o
 texto sem a afirmação e avise que está pendente. O arquivo também lista os
 conflitos ainda abertos entre as duas unidades.
 
+Cada unidade é uma **pousada**, nunca uma "casa": "duas pousadas", "a
+pousada", nunca "duas casas" (pedido do João, 2026-09-24).
+
 ## Fotos e galerias
 
 As galerias e os carrosséis dos cards **não são escritos à mão**: saem de
