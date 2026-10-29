@@ -107,13 +107,12 @@ O funil é um endereço à parte, para os anúncios do Meta:
   O `vercel.json` manda `X-Robots-Tag: noindex` nesse endereço, e o canonical
   aponta para `/`. Não troque por um `rewrites` para `/index.html`: com
   `cleanUrls` isso dá 404 (aconteceu em 2026-10-29).
-- `assets/site.js` liga o "funil" quando a página é `/orcamento` e guarda isso
-  no `sessionStorage` (`bb-funil`): ali e nas páginas que o visitante abrir
-  depois na mesma aba, todo botão de WhatsApp vira
-  `/quiz?unidade=<unidade>` (os de suíte com `&suite=<slug>`) e o clique sai
-  como `clique_quiz`. Botão novo de WhatsApp é pego automaticamente; botão de
-  suíte novo precisa entrar em `SUITE_DO_BOTAO` (site.js) e em
-  `UNIDADES[...].suites` (quiz.html).
+- `assets/site.js` liga o "funil" **só quando o endereço é `/orcamento`**: ali
+  todo botão de WhatsApp vira `/quiz?unidade=<unidade>` e o clique sai como
+  `clique_quiz`. Não guarde o funil entre páginas (sessionStorage, cookie):
+  em 2026-10-29 isso fez a home levar ao quiz para quem tinha passado pelo
+  `/orcamento`, e o João reclamou. Quem sai do `/orcamento` para outra página
+  volta ao WhatsApp direto.
 - No dataLayer, a home aberta por `/orcamento` sai com `pagina: "orcamento"`.
 
 ## Quiz de orçamento (`/quiz`)

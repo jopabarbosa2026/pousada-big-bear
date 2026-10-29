@@ -13,32 +13,23 @@
 
   var CFG = window.PAGINA || {};
   var UNIDADE = CFG.unidade || null;
-  /* /orcamento é a home servida com outro endereço (rewrite no vercel.json) */
-  var PAGINA_ID = location.pathname === "/orcamento" ? "orcamento" : CFG.id || "desconhecida";
+  /* orcamento.html é cópia exata de index.html (npm run orcamento) */
+  var FUNIL = location.pathname === "/orcamento";
+  var PAGINA_ID = FUNIL ? "orcamento" : CFG.id || "desconhecida";
 
   /* ===== FUNIL DOS ANÚNCIOS (/orcamento) ===================================
-     /orcamento é uma cópia da home para os anúncios do Meta. Ali, e nas
-     páginas que o visitante abrir depois na mesma aba, os botões de WhatsApp
-     levam ao quiz (/quiz), que mostra o valor antes da conversa.
-     Quem chega pelo Google ou digitando o endereço nunca passa por aqui e fala
-     direto no WhatsApp: o site principal não pode mudar, para não mexer nas
-     campanhas do Google Ads (pedido do João, 2026-10-29). */
-  var SUITE_DO_BOTAO = {
-    "acomodacoes-suite-luxo": "luxo", "acomodacoes-suite-master": "master", "acomodacoes-suite-superior": "superior",
-    "acomodacoes-deluxe": "deluxe", "acomodacoes-executivo": "deluxe-executivo", "acomodacoes-conjugada": "conjugada"
-  };
-  var funil = location.pathname === "/orcamento";
-  try {
-    if (funil) sessionStorage.setItem("bb-funil", "1");
-    else funil = sessionStorage.getItem("bb-funil") === "1";
-  } catch (e) { /* sem sessionStorage: o funil vale só no próprio /orcamento */ }
-
-  if (funil && CFG.id !== "quiz") {
+     /orcamento é uma cópia da home para os anúncios do Meta. SÓ ALI os botões
+     de WhatsApp levam ao quiz (/quiz), que mostra o valor antes da conversa.
+     Todas as outras páginas — inclusive a home e as das pousadas abertas a
+     partir do /orcamento — falam direto no WhatsApp, sempre: o site principal
+     não pode mudar, para não mexer nas campanhas do Google Ads (pedido do
+     João, 2026-10-29). Não guarde o funil entre páginas (sessionStorage,
+     cookie): a home levou ao quiz por isso e ele reclamou. */
+  if (FUNIL) {
     document.querySelectorAll('a[href^="https://api.whatsapp.com/"]').forEach(function (a) {
       var u = a.dataset.unidade || UNIDADE;
       if (!u) return;
-      var s = SUITE_DO_BOTAO[a.dataset.cta];
-      a.href = "/quiz?unidade=" + u + (s ? "&suite=" + s : "");
+      a.href = "/quiz?unidade=" + u;
       a.removeAttribute("target");
       a.removeAttribute("rel");
     });
