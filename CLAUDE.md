@@ -74,6 +74,13 @@ São pousadas distintas, com **WhatsApp e conta de Google Ads separados**:
 | WhatsApp | 5512996199997 | 5512996394583 |
 | Google Ads | AW-609262373 | AW-17323004957 |
 
+**Nenhum botão das páginas vai direto ao WhatsApp** (pedido do João,
+2026-10-29). Todos os botões de reserva e o WhatsApp flutuante levam ao quiz:
+`/orcamento?unidade=big-bear-1` ou `big-bear-2`, e os botões de suíte
+acrescentam `&suite=<slug>`, que precisa existir em `UNIDADES[...].suites` no
+`orcamento.html`. O link do WhatsApp só sai do quiz. Botão novo segue a mesma
+regra. O telefone (`tel:`) continua direto.
+
 Por isso todo link de contato carrega `data-unidade="big-bear-1"` ou
 `"big-bear-2"`, e `assets/site.js` repassa esse valor no evento do dataLayer.
 É esse campo que decide para qual conta do Ads a conversão vai. **Um botão de
@@ -92,6 +99,8 @@ container. As tags do Google Ads também são montadas lá, com acionador de *ev
 condição na variável de camada de dados `unidade`.
 
 Cada evento leva também `local` (qual botão, vem do `data-cta`) e `pagina`.
+O clique num botão que leva ao quiz sai como `clique_orcamento`. Como as
+páginas não têm mais link direto, `clique_whatsapp` só vem de dentro do quiz.
 
 ## Quiz de orçamento (`/orcamento`)
 
