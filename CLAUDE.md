@@ -8,7 +8,7 @@ index.html        home da marca, apresenta as duas pousadas
 big-bear-1.html   /big-bear-1 — Av. Antonio Nicola Padula, 141
 big-bear-2.html   /big-bear-2 — Av. Emílio Ribas, 1074
 quiz.html         /quiz — quiz de orçamento que filtra o visitante antes do WhatsApp
-                  (/orcamento não tem arquivo: é a home, por rewrite no vercel.json)
+orcamento.html    /orcamento — CÓPIA EXATA de index.html (npm run orcamento), home dos anúncios do Meta
 assets/estilo.css CSS das três páginas
 assets/site.js    carrosséis, galeria, lightbox, menu e rastreio de cliques
 fotos/otim/       fotos antigas da Big Bear 1 (hero e seções), em AVIF e WebP
@@ -102,10 +102,11 @@ campanhas do Google Ads (pedido do João, 2026-10-29).
 
 O funil é um endereço à parte, para os anúncios do Meta:
 
-- **`/orcamento`** é a própria home (`index.html`) servida com outro endereço
-  pelo `rewrites` do `vercel.json`, com `X-Robots-Tag: noindex` — não há
-  arquivo próprio, então a cópia nunca fica desatualizada. O canonical da home
-  aponta para `/`.
+- **`/orcamento`** é `orcamento.html`, **cópia exata de `index.html`**. Depois
+  de editar a home, rode `npm run orcamento` (`galeria` e `cards` já rodam).
+  O `vercel.json` manda `X-Robots-Tag: noindex` nesse endereço, e o canonical
+  aponta para `/`. Não troque por um `rewrites` para `/index.html`: com
+  `cleanUrls` isso dá 404 (aconteceu em 2026-10-29).
 - `assets/site.js` liga o "funil" quando a página é `/orcamento` e guarda isso
   no `sessionStorage` (`bb-funil`): ali e nas páginas que o visitante abrir
   depois na mesma aba, todo botão de WhatsApp vira
