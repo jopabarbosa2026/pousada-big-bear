@@ -9,6 +9,9 @@ big-bear-1.html   /big-bear-1 — Av. Antonio Nicola Padula, 141
 big-bear-2.html   /big-bear-2 — Av. Emílio Ribas, 1074
 quiz.html         /quiz — quiz de orçamento que filtra o visitante antes do WhatsApp
 orcamento.html    /orcamento — CÓPIA EXATA de index.html (npm run orcamento), home dos anúncios do Meta
+romantico.html    /romantico — campanha Google Ads: viagem a dois, as duas pousadas
+meio-de-semana.html /meio-de-semana — campanha Google Ads: R$ 350 de domingo a quinta, as duas pousadas
+assets/lp.css     CSS das páginas de campanha (carregado depois de estilo.css)
 assets/estilo.css CSS das três páginas
 assets/site.js    carrosséis, galeria, lightbox, menu e rastreio de cliques
 fotos/otim/       fotos antigas da Big Bear 1 (hero e seções), em AVIF e WebP
@@ -144,3 +147,21 @@ de semana e achou caro recebe a oferta de dias de semana antes de sair.
   `quiz-qualificado` ou `quiz-fora-da-faixa`. Uma conversão montada para o
   funil deve contar só `quiz-qualificado` — é isso que ensina o lance
   automático a buscar gente que aceita o preço.
+
+## Páginas de campanha do Google Ads (`/romantico`, `/meio-de-semana`)
+
+Criadas em 2026-10-29 para anúncios do Google: uma de viagem a dois e uma da
+diária de R$ 350 de domingo a quinta. As duas falam das **duas pousadas** e
+os botões abrem o **WhatsApp direto** (sem quiz), cada um com `data-unidade`,
+`data-cta` próprio (`romantico-*`, `semana-*`) e mensagem pré-preenchida.
+Ficam fora da busca orgânica (`noindex, follow`) e não têm link no site
+principal.
+
+- Só fato confirmado em `docs/operacao-pousada.md`. Da Big Bear 1 entram
+  apenas a hidromassagem da Suíte Master (João, 2026-10-29), a academia e a
+  sauna e a nota 9,9 de localização; o resto dela ainda está "a confirmar".
+- O valor de R$ 350 aparece escrito no HTML (e as contas de 2 a 5 noites).
+  Se a diária de semana mudar, troque aqui **e** em `QUIZ_VALORES` do quiz.
+- Fotos reais do arquivo (`fotos/gal/`), legenda descrevendo só o que a foto
+  mostra. Não há foto com pessoas: o João quer casal nas fotos (vinho,
+  banheira com rosas). Quando chegarem, entram pelo fluxo normal de fotos.

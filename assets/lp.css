@@ -1,0 +1,105 @@
+/* =============================================================================
+   Páginas de campanha do Google Ads: /romantico e /meio-de-semana.
+   Carregado depois de estilo.css, reaproveita as cores e os botões de lá.
+   ========================================================================== */
+body.lp{background:var(--creme)}
+
+/* ---------- TOPO COM FOTO ---------- */
+.lp-hero{position:relative;color:#fff;min-height:min(94vh,780px);display:flex;align-items:flex-end;
+  padding:96px 20px 56px;background:var(--pinho);overflow:hidden}
+.lp-hero-bg{position:absolute;inset:0}
+.lp-hero-bg img{width:100%;height:100%;object-fit:cover}
+.lp-hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(20,33,26,.62) 0%,rgba(20,33,26,.18) 30%,rgba(20,33,26,.55) 60%,rgba(20,33,26,.92) 100%)}
+.lp-topo{position:absolute;top:0;left:0;right:0;z-index:2;padding:20px}
+.lp-topo-in{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lp-marca{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:1.15rem;color:#fff}
+.lp-marca img{width:36px;height:36px;border-radius:10px}
+.lp-marca span{font-family:var(--sans);font-weight:500;font-size:.8rem;letter-spacing:.04em;color:#e9c9ac}
+.lp-topo .btn{padding:10px 16px;font-size:.85rem}
+.lp-hero-in{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;width:100%}
+.lp-eyebrow{font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#e9c9ac}
+.lp-hero h1{font-size:clamp(2.1rem,6.2vw,4rem);line-height:1.04;margin:12px 0 16px;max-width:15ch;color:#fff}
+.lp-hero h1 em{font-style:italic;color:#e9c9ac}
+.lp-lead{font-size:1.08rem;line-height:1.55;max-width:46ch;color:rgba(255,255,255,.92)}
+.lp-selos{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.lp-selos li{font-size:.78rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24);
+  border-radius:100px;padding:6px 12px;backdrop-filter:blur(6px)}
+.lp-selos b{color:#e9c9ac}
+.lp-ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.lp-ctas .btn{justify-content:center}
+.btn svg{width:20px;height:20px;flex-shrink:0}
+@media(max-width:560px){
+  .lp-hero{padding:88px 16px 40px;min-height:88vh}
+  .lp-ctas .btn{flex:1 1 100%}
+  .lp-topo{padding:16px}
+  .lp-topo .btn{display:none}
+}
+
+/* ---------- SEÇÕES ---------- */
+.lp-sec{padding:76px 20px}
+.lp-sec.claro{background:#fff}
+.lp-in{max-width:var(--maxw);margin:0 auto}
+.lp-rot{font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--cobre)}
+.lp-sec h2{font-size:clamp(1.75rem,4.2vw,2.7rem);line-height:1.1;color:var(--pinho);max-width:22ch;margin-top:10px}
+.lp-sub{color:#55554d;max-width:62ch;margin-top:12px;font-size:1.02rem;line-height:1.6}
+@media(max-width:560px){.lp-sec{padding:56px 16px}}
+
+/* cartões com foto */
+.lp-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:34px}
+.lp-card{background:#fff;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 24px 48px -32px rgba(31,59,47,.45),0 1px 3px rgba(31,59,47,.06)}
+.lp-card picture img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block}
+.lp-card .corpo{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.lp-card h3{font-size:1.3rem;color:var(--pinho)}
+.lp-card p{color:#55554d;font-size:.95rem;line-height:1.55}
+.lp-card .btn{margin-top:auto;justify-content:center}
+.lp-tag{align-self:flex-start;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--musgo);background:#e3efe6;border-radius:100px;padding:4px 10px}
+
+/* bloco de preço */
+.lp-preco{background:var(--pinho);color:var(--creme);border-radius:26px;padding:clamp(24px,5vw,44px);
+  display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;margin-top:34px}
+.lp-preco .lp-rot{color:#e9c9ac}
+.lp-num{font-family:var(--serif);font-weight:500;font-size:clamp(3rem,11vw,5.4rem);line-height:1;color:#fff;margin:8px 0 6px}
+.lp-num small{font-family:var(--sans);font-size:1rem;font-weight:500;color:rgba(246,241,231,.8)}
+.lp-preco p{color:rgba(246,241,231,.82);line-height:1.55}
+.lp-noites{display:grid;gap:8px}
+.lp-noites div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  background:rgba(255,255,255,.07);border-radius:12px;padding:12px 16px}
+.lp-noites b{font-family:var(--serif);font-weight:500;font-size:1.35rem;color:#fff}
+.lp-preco .btn{margin-top:18px;justify-content:center}
+.lp-nota{font-size:.82rem;color:#7a7a70;margin-top:14px}
+.lp-preco .lp-nota{color:rgba(246,241,231,.65)}
+@media(max-width:760px){.lp-preco{grid-template-columns:1fr}}
+
+/* motivos */
+.lp-motivos{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:30px}
+.lp-motivos li{background:#fff;border-radius:16px;padding:18px 20px;color:#4a4a44;line-height:1.5}
+.lp-sec.claro .lp-motivos li{background:var(--creme)}
+.lp-motivos b{display:block;font-family:var(--serif);font-weight:500;font-size:1.15rem;color:var(--pinho);margin-bottom:4px}
+
+/* as duas pousadas */
+.lp-pousadas{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:34px}
+.lp-pousada{background:var(--creme);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:10px}
+.lp-sec:not(.claro) .lp-pousada{background:#fff}
+.lp-pousada h3{font-size:1.5rem;color:var(--pinho)}
+.lp-end{font-size:.88rem;color:#6b6b62}
+.lp-lista{list-style:none;display:grid;gap:8px;margin:8px 0 14px}
+.lp-lista li{display:flex;gap:10px;color:#3f3f38;line-height:1.45}
+.lp-lista li::before{content:"✓";color:var(--musgo);font-weight:700}
+.lp-pousada .btn{margin-top:auto;justify-content:center}
+
+/* galeria */
+.lp-gal{columns:3 220px;column-gap:12px;margin-top:30px}
+.lp-gal figure{break-inside:avoid;margin:0 0 12px}
+.lp-gal img{width:100%;height:auto;border-radius:14px;display:block}
+.lp-gal figcaption{font-size:.78rem;color:#7a7a70;margin-top:6px}
+
+/* chamada final e rodapé */
+.lp-final{background:var(--pinho);color:var(--creme);text-align:center;padding:72px 20px}
+.lp-final h2{color:#fff;margin:10px auto 0}
+.lp-final .lp-sub{color:rgba(246,241,231,.82);margin:12px auto 0}
+.lp-final .lp-ctas{justify-content:center}
+.lp-rodape{text-align:center;font-size:.8rem;color:#6b6b62;padding:36px 20px 96px;line-height:1.7}
+.lp-rodape a{text-decoration:underline;text-underline-offset:2px}

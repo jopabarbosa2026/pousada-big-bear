@@ -178,7 +178,10 @@ página mantém o número da sua própria unidade.
    home hoje fala só em "gratuito" para não errar por nenhum dos lados.
 3. **Hidromassagem nas suítes Master e Superior.** Segue publicada na Big Bear 1.
    Na Big Bear 2 essa mesma afirmação foi retirada em 2026-09-02 por não
-   existir — vale confirmar se na Big Bear 1 existe mesmo.
+   existir. **Suíte Master: confirmada pelo João em 2026-10-29** ("o bb1 tem
+   hidromassagem nas suítes master"). A foto `fotos/gal/bb1/jv3a0191` mostra
+   uma banheira de hidromassagem da Big Bear 1, sem dizer de qual suíte.
+   **Suíte Superior: ainda a confirmar.**
 4. **Avaliações do Booking.** Big Bear 1 diz 655 avaliações; Big Bear 2, 355.
    Confirme se os dois números estão atualizados. Desde 2026-09-23 os dois
    selos aparecem lado a lado na hero da home, cada um com o nome da sua
