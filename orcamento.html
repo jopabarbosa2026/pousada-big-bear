@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Quiz de orçamento (/orcamento).
+     Filtra o visitante ANTES do WhatsApp: pergunta pousada, período, número de
+     pessoas e datas, mostra a faixa de valor e só oferece o botão de WhatsApp
+     em destaque a quem diz que a faixa cabe no orçamento. Quem escolheu fim de
+     semana e acha caro recebe a oferta de dias de semana (domingo a quinta).
+
+     - Valores: bloco QUIZ_VALORES, no script do fim da página.
+     - Fatos: só os confirmados em docs/operacao-pousada.md.
+     - ?unidade=big-bear-1 ou ?unidade=big-bear-2 pula a pergunta da pousada —
+       é o link que cada conta de Ads deve usar.
+     - Eventos no dataLayer: quiz_resposta, quiz_valor, quiz_resultado (com
+       quiz_qualificado "sim"/"nao") e o clique_whatsapp de sempre, com
+       local "quiz-qualificado" ou "quiz-fora-da-faixa". -->
+<!-- Google Tag Manager -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  (function () {
+    var p = new URLSearchParams(location.search).get('unidade') || '';
+    var m = p.match(/^(?:big-bear-|bb)?([12])$/i);
+    window.UNIDADE_URL = m ? 'big-bear-' + m[1] : null;
+    var d = {site: 'big-bear', pagina: 'orcamento'};
+    if (window.UNIDADE_URL) d.unidade = window.UNIDADE_URL;
+    dataLayer.push(d);
+  })();
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+  var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;
+  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KJ4GH8NC');
+</script>
+<!-- Fim do Google Tag Manager -->
+<link rel="preload" as="image" type="image/avif" imagesrcset="/fotos/gal/bb1/dji-20260903181358-0065-d-480.avif 480w, /fotos/gal/bb1/dji-20260903181358-0065-d-960.avif 960w, /fotos/gal/bb1/dji-20260903181358-0065-d-1600.avif 1600w" imagesizes="100vw">
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<title>Quanto custa sua estadia? — Pousada Big Bear, Campos do Jordão</title>
+<meta name="description" content="Responda algumas perguntas rápidas e veja a faixa de valor da sua estadia nas pousadas Big Bear, na Vila Capivari, em Campos do Jordão.">
+<!-- Página de funil para os anúncios: fica fora da busca orgânica para não
+     disputar com a home e as páginas das unidades. -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#1f3b2f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/estilo.css">
+<style>
+  body.qz{background:var(--creme)}
+
+  /* ---------- TOPO COM FOTO ---------- */
+  .qz-hero{position:relative;color:#fff;text-align:center;padding:26px 20px 104px;background:var(--pinho);overflow:hidden}
+  .qz-hero-bg{position:absolute;inset:0}
+  .qz-hero-bg img{width:100%;height:100%;object-fit:cover}
+  .qz-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(20,33,26,.74) 0%,rgba(20,33,26,.5) 45%,rgba(20,33,26,.86) 100%)}
+  .qz-hero-in{position:relative;z-index:1;max-width:680px;margin:0 auto}
+  .qz-marca{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:1.15rem}
+  .qz-marca img{width:36px;height:36px;border-radius:10px}
+  .qz-marca span{font-family:var(--sans);font-weight:500;font-size:.8rem;letter-spacing:.04em;color:#e9c9ac}
+  .qz-hero h1{font-size:clamp(1.85rem,5.4vw,3rem);margin:30px auto 12px;max-width:18ch;color:#fff}
+  .qz-hero h1 em{font-style:italic;color:#e9c9ac}
+  .qz-lead{font-size:1.05rem;color:rgba(255,255,255,.9);max-width:40ch;margin:0 auto}
+  .qz-selos{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+  .qz-selos li{font-size:.78rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+    border-radius:100px;padding:6px 12px;backdrop-filter:blur(6px)}
+  .qz-selos b{color:#e9c9ac}
+
+  /* ---------- CARTÃO DO QUIZ ---------- */
+  .qz-card{position:relative;z-index:2;max-width:620px;margin:-72px auto 0;background:#fff;border-radius:22px;
+    padding:22px 26px 30px;box-shadow:0 30px 60px -30px rgba(31,59,47,.45),0 2px 6px rgba(31,59,47,.06);
+    scroll-margin-top:12px}
+  @media(max-width:660px){
+    .qz-card{margin:-72px 12px 0;padding:18px 16px 24px}
+    .qz-hero{padding:20px 16px 92px}
+    .qz-hero h1{margin-top:22px}
+    .qz-lead{font-size:1rem}
+  }
+  .qz-barra{height:6px;background:var(--creme-2);border-radius:100px;overflow:hidden}
+  .qz-barra i{display:block;height:100%;width:0;background:var(--cobre);border-radius:inherit;transition:width .45s ease}
+  .qz-nav{display:flex;align-items:center;min-height:40px;margin-top:6px}
+  .qz-voltar{background:none;border:0;font:inherit;font-size:.88rem;font-weight:500;color:var(--musgo);cursor:pointer;padding:8px 4px}
+  .qz-voltar:hover{color:var(--pinho)}
+  .qz-passo{font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--cobre);margin-left:auto}
+
+  .qz-step{animation:qzEntra .35s ease both}
+  @keyframes qzEntra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .qz-step h2{font-size:clamp(1.4rem,4.2vw,1.75rem);color:var(--pinho);margin:6px 0 18px;outline:none}
+  .qz-texto{color:#4a4a44;margin-bottom:14px}
+
+  .qz-ops{display:grid;gap:10px}
+  .qz-ops[hidden]{display:none}
+  .qz-op{display:block;width:100%;text-align:left;position:relative;padding:15px 46px 15px 18px;background:#fff;
+    border:1.5px solid rgba(31,59,47,.14);border-radius:14px;font:inherit;color:var(--carvao);cursor:pointer;
+    transition:border-color .2s,background .2s;min-height:58px}
+  .qz-op b{display:block;font-weight:600;font-size:1rem;color:var(--pinho)}
+  .qz-op span{display:block;font-size:.85rem;color:#6b6b62;margin-top:2px}
+  .qz-op::after{content:"";position:absolute;right:20px;top:50%;width:8px;height:8px;
+    border-top:2px solid var(--cobre);border-right:2px solid var(--cobre);transform:translateY(-50%) rotate(45deg);transition:.2s}
+  .qz-op:hover{border-color:var(--cobre);background:#fffaf4}
+  .qz-op:focus-visible{outline:3px solid rgba(181,106,61,.35);outline-offset:2px}
+  .qz-op[aria-pressed="true"]{border-color:var(--cobre);background:#fbf1e7}
+  .qz-op[aria-expanded="true"]::after{transform:translateY(-70%) rotate(135deg)}
+
+  .qz-painel{background:var(--creme);border-radius:14px;padding:16px}
+  /* min-width:0 em tudo: sem isso, item de grade com largura mínima própria
+     empurra o cartão para fora da tela no celular */
+  .qz-ops > *{min-width:0}
+
+  /* ---------- CALENDÁRIO (datas sempre em dd/mm/aaaa) ---------- */
+  .qz-datas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+  .qz-campo{font:inherit;text-align:left;background:#fff;border:1.5px solid rgba(31,59,47,.16);border-radius:12px;
+    padding:8px 12px;min-width:0;cursor:pointer;color:var(--carvao);transition:border-color .2s,box-shadow .2s}
+  .qz-campo small{display:block;font-size:.74rem;font-weight:600;color:var(--musgo)}
+  .qz-campo b{display:block;font-size:1rem;font-weight:600;color:var(--pinho);font-variant-numeric:tabular-nums;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qz-campo b.vazio{font-weight:500;color:#a3a39a}
+  .qz-campo[aria-pressed="true"]{border-color:var(--cobre);box-shadow:0 0 0 3px rgba(181,106,61,.14)}
+  .qz-campo:focus-visible{outline:3px solid rgba(181,106,61,.35);outline-offset:2px}
+  .qz-cal{background:#fff;border-radius:14px;padding:6px 8px 10px;margin-top:10px}
+  .qz-cal-topo{display:flex;align-items:center;justify-content:space-between}
+  .qz-cal-topo strong{font-family:var(--serif);font-weight:500;font-size:1.08rem;color:var(--pinho);white-space:nowrap}
+  .qz-cal-seta{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;background:none;
+    color:var(--cobre);cursor:pointer}
+  .qz-cal-seta svg{width:20px;height:20px}
+  .qz-cal-seta:hover:not(:disabled){background:var(--creme)}
+  .qz-cal-seta:disabled{color:#d4d4cc;cursor:default}
+  .qz-cal-seta:focus-visible{outline:3px solid rgba(181,106,61,.35)}
+  .qz-cal-sem,.qz-cal-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+  .qz-cal-sem span{text-align:center;font-size:.68rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    color:#8a8a80;padding:6px 0 4px}
+  .qz-cal-dias{row-gap:3px}
+  .qz-dia{display:block;min-width:0;padding:0;border:0;background:none;font:inherit;color:var(--carvao);cursor:pointer}
+  .qz-dia span{display:grid;place-items:center;width:100%;max-width:40px;aspect-ratio:1;margin:0 auto;border-radius:50%;
+    font-size:.95rem;font-variant-numeric:tabular-nums;transition:background .15s}
+  .qz-dia:hover:not(:disabled) span{background:var(--creme-2)}
+  .qz-dia:disabled{color:#c8c8bf;cursor:default}
+  .qz-dia.hoje span{box-shadow:inset 0 0 0 1.5px rgba(181,106,61,.55)}
+  /* faixa entre a chegada e a saída */
+  .qz-dia.meio{background:#f6e8da}
+  .qz-dia.ini.com-fim{background:linear-gradient(90deg,transparent 50%,#f6e8da 50%)}
+  .qz-dia.fim{background:linear-gradient(90deg,#f6e8da 50%,transparent 50%)}
+  .qz-dia.ini span,.qz-dia.fim span,.qz-dia.ini:hover span,.qz-dia.fim:hover span{background:var(--pinho);color:#fff;font-weight:600}
+  .qz-dia:focus-visible{outline:none}
+  .qz-dia:focus-visible span{outline:3px solid rgba(181,106,61,.45);outline-offset:1px}
+  .qz-cal-status{font-size:.88rem;color:#4a4a44;margin-top:10px;min-height:1.4em}
+  @media(max-width:400px){.qz-painel-datas{padding:10px}.qz-cal{padding:4px 2px 8px}}
+  /* celular estreito (320–360): a data inteira "17/11/2026" precisa caber */
+  @media(max-width:360px){
+    .qz-campo{padding:7px 9px}
+    .qz-campo b{font-size:.92rem}
+    .qz-cal-topo strong{font-size:.98rem}
+    .qz-cal-seta{width:36px;height:36px}
+  }
+
+  .qz-erro{color:#a33a1f;font-size:.85rem;margin-top:10px}
+  .qz-painel .btn{width:100%;justify-content:center;margin-top:12px}
+  .qz-meses{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+  .qz-chip{padding:12px 14px;min-height:0;text-align:center;font-weight:600;color:var(--pinho)}
+  .qz-chip::after{display:none}
+
+  /* ---------- FAIXA DE VALOR ---------- */
+  .qz-faixa{background:var(--pinho);color:var(--creme);border-radius:18px;padding:18px 22px;margin-bottom:12px}
+  .qz-faixa-rot{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#e9c9ac}
+  .qz-faixa-rot small{font-size:.78rem;font-weight:500;letter-spacing:0;text-transform:none;color:rgba(246,241,231,.7)}
+  .qz-linha{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+  .qz-linha:last-of-type{border-bottom:0}
+  .qz-un{display:block;font-size:.82rem;color:rgba(246,241,231,.75)}
+  .qz-num{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(1.7rem,6vw,2.2rem);color:#fff;line-height:1.15}
+  .qz-num.consulta{font-size:1.3rem;color:rgba(246,241,231,.9)}
+  .qz-total{display:block;font-size:.88rem;color:#e9c9ac;margin-top:4px}
+  .qz-faixa-det{font-size:.85rem;color:rgba(246,241,231,.75)}
+  .qz-vant{list-style:none;display:grid;gap:8px;margin:14px 0 6px}
+  .qz-vant li{display:flex;gap:10px;font-size:.92rem;color:#3f3f38}
+  .qz-vant li::before{content:"✓";color:var(--musgo);font-weight:700}
+  .qz-aviso{background:#fbf1e7;border-left:3px solid var(--cobre);padding:10px 14px;border-radius:0 10px 10px 0;
+    font-size:.9rem;margin:10px 0;color:#4a3a2c}
+  .qz-nota{font-size:.8rem;color:#7a7a70;margin-top:10px}
+  .qz-pergunta{font-size:1.25rem;color:var(--pinho);margin:24px 0 12px}
+
+  /* ---------- FINAL ---------- */
+  .qz-ok{width:52px;height:52px;border-radius:50%;background:#e3efe6;color:var(--musgo);display:grid;place-items:center;margin:6px 0 4px}
+  .qz-ok svg{width:26px;height:26px}
+  .qz-resumo{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;background:var(--creme);border-radius:14px;
+    padding:16px 18px;margin:18px 0 20px;font-size:.92rem}
+  .qz-resumo dt{color:var(--musgo);font-weight:600}
+  @media(max-width:420px){.qz-resumo{grid-template-columns:1fr;gap:0}.qz-resumo dd{margin-bottom:8px}}
+  .qz-ctas{display:grid;gap:10px}
+  .qz-ctas .btn{justify-content:center;white-space:normal;text-align:center;padding:16px 22px;font-size:1rem}
+  .qz-ctas .btn svg{width:22px;height:22px;flex-shrink:0}
+  .qz-mini{font-size:.8rem;color:#7a7a70;text-align:center;margin-top:12px}
+  .qz-fora{margin-top:22px;font-size:.9rem;color:#57574f}
+  .qz-link{color:var(--musgo);text-decoration:underline;text-underline-offset:3px}
+  .qz-refazer{display:inline-block;margin-top:14px;background:none;border:0;font:inherit;font-size:.88rem;
+    color:var(--musgo);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px 0}
+
+  .qz-rodape{text-align:center;font-size:.8rem;color:#6b6b62;padding:36px 20px 48px;line-height:1.7}
+  .qz-rodape a{text-decoration:underline;text-underline-offset:2px}
+
+  @media (prefers-reduced-motion: reduce){.qz-step{animation:none}.qz-barra i{transition:none}}
+</style>
+</head>
+<body class="qz">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KJ4GH8NC"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- Fim do Google Tag Manager (noscript) -->
+
+<div class="qz-hero">
+  <picture class="qz-hero-bg">
+    <source type="image/avif" sizes="100vw" srcset="/fotos/gal/bb1/dji-20260903181358-0065-d-480.avif 480w, /fotos/gal/bb1/dji-20260903181358-0065-d-960.avif 960w, /fotos/gal/bb1/dji-20260903181358-0065-d-1600.avif 1600w">
+    <img src="/fotos/gal/bb1/dji-20260903181358-0065-d-960.webp" sizes="100vw" srcset="/fotos/gal/bb1/dji-20260903181358-0065-d-480.webp 480w, /fotos/gal/bb1/dji-20260903181358-0065-d-960.webp 960w, /fotos/gal/bb1/dji-20260903181358-0065-d-1600.webp 1600w" alt="" width="960" height="720" fetchpriority="high" decoding="async">
+  </picture>
+  <div class="qz-hero-in">
+    <div class="qz-marca"><img src="/assets/marca-urso.png" alt="" width="240" height="240"> Big Bear <span>· Campos do Jordão</span></div>
+    <h1>Quanto custa sua estadia na <em id="qzNomeTitulo">Big Bear</em>?</h1>
+    <p class="qz-lead">Responda <span id="qzNPerguntas">4</span> perguntas rápidas e veja a faixa de valor na hora, antes de chamar no WhatsApp.</p>
+    <ul class="qz-selos">
+      <li><b>9,9</b> de localização no Booking.com</li>
+      <li>Vila Capivari, a poucos passos da Praça</li>
+    </ul>
+  </div>
+</div>
+
+<main class="qz-card" id="quiz">
+  <div class="qz-barra"><i id="qzBarra"></i></div>
+  <div class="qz-nav">
+    <button type="button" class="qz-voltar" id="qzVoltar" hidden>← Voltar</button>
+    <span class="qz-passo" id="qzPasso"></span>
+  </div>
+
+  <noscript>
+    <p class="qz-texto">Para ver o valor aqui, ative o JavaScript do navegador — ou fale direto pelo WhatsApp com a
+      <a class="qz-link" href="https://api.whatsapp.com/send?phone=5512996199997">Big Bear 1</a> ou a
+      <a class="qz-link" href="https://api.whatsapp.com/send?phone=5512996394583">Big Bear 2</a>.</p>
+  </noscript>
+
+  <section class="qz-step" data-step="unidade" hidden>
+    <h2 id="qzH-unidade" tabindex="-1">Qual pousada você está olhando?</h2>
+    <div class="qz-ops" data-pergunta="unidade" role="group" aria-labelledby="qzH-unidade">
+      <button type="button" class="qz-op" data-valor="big-bear-1"><b>Big Bear 1</b><span>Av. Antonio Nicola Padula, 141 · Vila Capivari</span></button>
+      <button type="button" class="qz-op" data-valor="big-bear-2"><b>Big Bear 2</b><span>Av. Emílio Ribas, 1074 · Vila Capivari</span></button>
+      <button type="button" class="qz-op" data-valor="as-duas"><b>Ainda não escolhi</b><span>Mostro o valor das duas</span></button>
+    </div>
+  </section>
+
+  <section class="qz-step" data-step="periodo" hidden>
+    <h2 id="qzH-periodo" tabindex="-1">Quando você quer se hospedar?</h2>
+    <div class="qz-ops" data-pergunta="periodo" role="group" aria-labelledby="qzH-periodo">
+      <button type="button" class="qz-op" data-valor="fds"><b>Fim de semana</b><span>Sexta a domingo</span></button>
+      <button type="button" class="qz-op" data-valor="semana"><b>Durante a semana</b><span>Domingo a quinta</span></button>
+      <button type="button" class="qz-op" data-valor="feriado"><b>Feriado</b><span>Natal, Réveillon, Carnaval, feriadões</span></button>
+      <button type="button" class="qz-op" data-valor="indef"><b>Ainda não decidi</b><span>Quero comparar os valores</span></button>
+    </div>
+  </section>
+
+  <section class="qz-step" data-step="pessoas" hidden>
+    <h2 id="qzH-pessoas" tabindex="-1">Quantas pessoas vão, contando as crianças?</h2>
+    <div class="qz-ops" data-pergunta="pessoas" role="group" aria-labelledby="qzH-pessoas">
+      <button type="button" class="qz-op" data-valor="2"><b>1 ou 2 pessoas</b></button>
+      <button type="button" class="qz-op" data-valor="3"><b>3 pessoas</b></button>
+      <button type="button" class="qz-op" data-valor="4"><b>4 pessoas</b></button>
+      <button type="button" class="qz-op" data-valor="5"><b>5 ou mais</b><span>Família grande ou grupo</span></button>
+    </div>
+  </section>
+
+  <section class="qz-step" data-step="quando" hidden>
+    <h2 id="qzH-quando" tabindex="-1">Você já tem as datas?</h2>
+    <div class="qz-ops" data-pergunta="quando" role="group" aria-labelledby="qzH-quando">
+      <button type="button" class="qz-op" data-valor="datas" aria-expanded="false" aria-controls="qzPainelDatas"><b>Sim, já sei as datas</b></button>
+      <!-- Calendário próprio em vez de <input type="date">: o campo nativo segue
+           o idioma do aparelho e, num celular em inglês, mostra mm/dd/aaaa. -->
+      <div class="qz-painel qz-painel-datas" id="qzPainelDatas" hidden>
+        <div class="qz-datas">
+          <button type="button" class="qz-campo" id="qzCampoChegada" aria-pressed="true"></button>
+          <button type="button" class="qz-campo" id="qzCampoSaida" aria-pressed="false"></button>
+        </div>
+        <div class="qz-cal">
+          <div class="qz-cal-topo">
+            <button type="button" class="qz-cal-seta" id="qzCalAnt" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <strong id="qzCalMes" aria-live="polite"></strong>
+            <button type="button" class="qz-cal-seta" id="qzCalProx" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+          <div class="qz-cal-sem" aria-hidden="true"><span>dom</span><span>seg</span><span>ter</span><span>qua</span><span>qui</span><span>sex</span><span>sáb</span></div>
+          <div class="qz-cal-dias" id="qzCalDias" role="group" aria-labelledby="qzCalMes"></div>
+        </div>
+        <p class="qz-cal-status" id="qzCalStatus" aria-live="polite"></p>
+        <p class="qz-erro" id="qzErroDatas" role="alert" hidden></p>
+        <button type="button" class="btn btn-primary" id="qzDatasOk">Ver o valor</button>
+      </div>
+      <button type="button" class="qz-op" data-valor="mes" aria-expanded="false" aria-controls="qzPainelMes"><b>Sei o mês, não o dia</b></button>
+      <div class="qz-painel" id="qzPainelMes" hidden>
+        <div class="qz-meses" id="qzMeses" data-pergunta="mes" role="group" aria-label="Mês da viagem"></div>
+      </div>
+      <button type="button" class="qz-op" data-valor="pesquisando"><b>Ainda estou pesquisando</b></button>
+    </div>
+    <div class="qz-ops" id="qzFeriados" data-pergunta="feriado" role="group" aria-labelledby="qzH-quando" hidden></div>
+  </section>
+
+  <section class="qz-step" data-step="valor" hidden>
+    <h2 id="qzH-valor" tabindex="-1">Valor da hospedagem</h2>
+    <div id="qzValor"></div>
+    <h3 class="qz-pergunta" id="qzValorPergunta"></h3>
+    <div class="qz-ops" id="qzValorOps" data-pergunta="faixa" role="group" aria-labelledby="qzValorPergunta"></div>
+  </section>
+
+  <section class="qz-step" data-step="semana" hidden>
+    <h2 id="qzH-semana" tabindex="-1">E se fosse durante a semana?</h2>
+    <div id="qzSemana"></div>
+    <div class="qz-ops" data-pergunta="semana" role="group" aria-labelledby="qzH-semana">
+      <button type="button" class="qz-op" data-valor="sim"><b>Posso ir durante a semana</b><span>Quero ver as datas disponíveis</span></button>
+      <button type="button" class="qz-op" data-valor="nao"><b>Só consigo no fim de semana</b></button>
+    </div>
+  </section>
+
+  <section class="qz-step" data-step="pronto" hidden>
+    <div class="qz-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2 id="qzH-pronto" tabindex="-1">Ótimo! Agora é só chamar a nossa equipe.</h2>
+    <p class="qz-texto">A mensagem já vai pronta com as suas respostas: é só tocar no botão e enviar.</p>
+    <dl class="qz-resumo" id="qzResumo"></dl>
+    <div class="qz-ctas" id="qzCtas"></div>
+    <button type="button" class="qz-refazer" data-refazer>Refazer o quiz</button>
+  </section>
+
+  <section class="qz-step" data-step="fora" hidden>
+    <h2 id="qzH-fora" tabindex="-1">Tudo bem! Obrigado por responder.</h2>
+    <p class="qz-texto">Os valores mudam ao longo do ano. Siga a gente no Instagram para ver as novidades e promoções.</p>
+    <div class="qz-ctas">
+      <a class="btn btn-ghost" href="https://www.instagram.com/pousada.bigbear/" target="_blank" rel="noopener">Seguir @pousada.bigbear</a>
+    </div>
+    <p class="qz-fora" id="qzFora"></p>
+    <button type="button" class="qz-refazer" data-refazer>Refazer o quiz</button>
+  </section>
+</main>
+
+<div class="qz-rodape">
+  <p><b>Pousada Big Bear</b> · duas pousadas na Vila Capivari, Campos do Jordão/SP</p>
+  <p>Big Bear 1 · Av. Antonio Nicola Padula, 141 &nbsp;·&nbsp; Big Bear 2 · Av. Emílio Ribas, 1074</p>
+  <p><a href="/big-bear-1">Conhecer a Big Bear 1</a> · <a href="/big-bear-2">Conhecer a Big Bear 2</a> · <a href="https://www.instagram.com/pousada.bigbear/" target="_blank" rel="noopener">Instagram</a></p>
+  <p>CNPJ 06.538.017/0001-83</p>
+</div>
+
+<script>
+/* ===== VALORES DO QUIZ — EDITE AQUI ===========================================
+   Fonte: planos tarifários da pousada (out/2026 a jun/2027), enviados pelo
+   João em 2026-10-29 — tarifa convencional e feriados. Registro e pendências
+   em docs/operacao-pousada.md ("Valores do quiz").
+
+   - Valores para CASAL (1 ou 2 pessoas). 3 ou mais pessoas: "sob consulta".
+   - Só a coluna "Tarifa" do plano. A "Mínima" é margem de negociação da
+     equipe e não aparece para o hóspede.
+   - semana: diária de domingo a quinta. R$ 350 o ano todo, por decisão do
+     João (2026-10-29) — o plano traz outro valor por mês, que fica de fora.
+   - fds: pacote de 2 diárias (noites de sexta e sábado), por mês "aaaa-mm".
+     Mês que não está aqui (jul a set/2027) = sob consulta.
+   - feriados: valor para 3 diárias. null = sob consulta.
+   O quiz NUNCA estima: o que não está aqui aparece como "sob consulta". */
+var QUIZ_VALORES = {
+  "big-bear-1": {
+    semana: 350,
+    fds: {
+      "2026-10": 1400, "2026-11": 1600, "2026-12": 1900, "2027-01": 1700, "2027-02": 1400,
+      "2027-03": 1100, "2027-04": 1500, "2027-05": 2000, "2027-06": 2200
+    },
+    feriados: {
+      "natal": 3300, "ano-novo": 5400, "carnaval": 3000, "pascoa": 3810, "tiradentes": 3000,
+      "corpus-christi": null      // fora do plano da Big Bear 1
+    }
+  },
+  "big-bear-2": {
+    semana: 350,
+    fds: {
+      "2026-10": 1680, "2026-11": 1700, "2026-12": 1800, "2027-01": 1770, "2027-02": 1390,
+      "2027-03": 1320, "2027-04": 1660, "2027-05": 1800, "2027-06": 2600
+    },
+    feriados: {
+      "natal": 3000, "ano-novo": 5500, "carnaval": 3100, "pascoa": 4200,
+      "tiradentes": null,         // o plano diz R$ 590 e "diária convencional" ao mesmo tempo: confirmar
+      "corpus-christi": 5999
+    }
+  }
+};
+
+/* Feriados com valor próprio. "noites": se a estadia escolhida no calendário
+   tiver uma dessas noites, o quiz mostra o valor do feriado em vez do de fim
+   de semana ou de semana. 1º de maio/2027 cai num sábado e segue a tarifa
+   convencional, por isso não está aqui. */
+var QUIZ_FERIADOS = [
+  { id: "natal",          nome: "Natal",          data: "24 e 25/12",          noites: ["2026-12-24", "2026-12-25"] },
+  { id: "ano-novo",       nome: "Ano Novo",       data: "31/12",               noites: ["2026-12-31"] },
+  { id: "carnaval",       nome: "Carnaval",       data: "6 a 9/02/2027",       noites: ["2027-02-06", "2027-02-07", "2027-02-08"] },
+  { id: "pascoa",         nome: "Páscoa",         data: "26 a 28/03/2027",     noites: ["2027-03-25", "2027-03-26", "2027-03-27"] },
+  { id: "tiradentes",     nome: "Tiradentes",     data: "21/04/2027, quarta",  noites: ["2027-04-20", "2027-04-21"] },
+  { id: "corpus-christi", nome: "Corpus Christi", data: "27/05/2027, quinta",  noites: ["2027-05-26", "2027-05-27", "2027-05-28", "2027-05-29"] }
+];
+
+(function () {
+  "use strict";
+
+  /* Fatos de cada unidade usados no quiz. Só entra o que está CONFIRMADO em
+     docs/operacao-pousada.md. A Big Bear 1 ainda tem tudo como "publicado, a
+     confirmar", por isso fica sem vantagens aqui. */
+  var UNIDADES = {
+    "big-bear-1": { nome: "Big Bear 1", whatsapp: "5512996199997", vantagens: [] },
+    "big-bear-2": {
+      nome: "Big Bear 2", whatsapp: "5512996394583",
+      vantagens: [
+        "Café da manhã estilo brunch incluso",
+        "Late checkout até 14h, sem custo, reservando direto",
+        "Estacionamento coberto e gratuito"
+      ]
+    }
+  };
+  var AS_DUAS = ["big-bear-1", "big-bear-2"];
+  var PERIODO = {
+    fds:     { nome: "Fim de semana", det: "sexta a domingo" },
+    semana:  { nome: "Durante a semana", det: "domingo a quinta" },
+    feriado: { nome: "Feriado", det: "" }
+  };
+  var PESSOAS = { "2": "1 ou 2", "3": "3", "4": "4", "5": "5 ou mais" };
+  var PARA_PESSOAS = { "2": "para até 2 pessoas", "3": "para 3 pessoas", "4": "para 4 pessoas", "5": "para 5 pessoas ou mais" };
+  var DIAS = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+  var MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
+               "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  var ICONE_WA = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2 0-.4 0-.5L8.8 6.7c-.2-.5-.4-.4-.6-.4H7.7c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.2 3.3 5.3 4.6 2.5 1.1 2.5.7 3 .7.5 0 1.6-.7 1.8-1.3.2-.7.2-1.2.1-1.3M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2"/></svg>';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var quiz = $("quiz");
+  var passos = Array.prototype.slice.call(quiz.querySelectorAll(".qz-step"));
+  var reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var FIXA = window.UNIDADE_URL;
+  var ORDEM = (FIXA ? [] : ["unidade"]).concat(["periodo", "pessoas", "quando", "valor"]);
+  var PERGUNTAS = ORDEM.length - 1;
+
+  var estado, atual = null;
+
+  function zerar() {
+    estado = {
+      unidade: FIXA,         // big-bear-1 | big-bear-2 | as-duas
+      periodo: null,         // o que a pessoa respondeu: fds | semana | feriado | indef
+      periodoFinal: null,    // o que vale para o preço, depois de olhar as datas
+      pessoas: null,         // "2" | "3" | "4" | "5"
+      quando: null,          // datas | mes | pesquisando | feriado
+      chegada: null, saida: null,
+      mes: null, mesChave: null,  // "novembro de 2026" e "2026-11"
+      feriado: null,         // id em QUIZ_FERIADOS, "outro" ou null
+      queria: null,          // fds | feriado, quando trocou por dias de semana
+      aviso: null,
+      temValor: false,
+      faixaOk: null,         // sim | sem-valor | nao
+      foiParaSemana: false
+    };
+  }
+
+  /* ---------- utilidades ---------- */
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  /* espaço inquebrável: "R$" não pode ficar numa linha e o número na outra */
+  function reais(n) { return "R$ " + n.toLocaleString("pt-BR"); }
+  function textoFaixa(f) { return f[0] === f[1] ? reais(f[0]) : reais(f[0]) + " a " + reais(f[1]); }
+  function hoje() { var d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function somaDias(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function paraCampo(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function lerData(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || "");
+    return m ? new Date(+m[1], m[2] - 1, +m[3]) : null;
+  }
+  /* 13/11 (sex); com o ano quando a viagem é no ano que vem: 08/01/2027 (sex) */
+  function dataCurta(d) {
+    return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) +
+      (d.getFullYear() !== hoje().getFullYear() ? "/" + d.getFullYear() : "") + " (" + DIAS[d.getDay()] + ")";
+  }
+  /* uma entrada por noite; noite de sexta ou sábado é noite de fim de semana */
+  function noites() {
+    var l = [];
+    for (var d = estado.chegada; d < estado.saida; d = somaDias(d, 1)) l.push(d);
+    return l;
+  }
+  function ehFds(d) { return d.getDay() === 5 || d.getDay() === 6; }
+
+  function unidadesEmJogo() {
+    return estado.unidade && estado.unidade !== "as-duas" ? [estado.unidade] : AS_DUAS;
+  }
+  function chaveMes(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1); }
+  function nomeMesChave(k) {
+    var ano = +k.slice(0, 4);
+    return MESES[+k.slice(5) - 1] + (ano !== hoje().getFullYear() ? " de " + ano : "");
+  }
+  function feriadoAtual() {
+    return QUIZ_FERIADOS.filter(function (f) { return f.id === estado.feriado; })[0] || null;
+  }
+
+  /* meses que valem para o fim de semana: os das noites de sexta e sábado das
+     datas, o mês escolhido, ou null (ainda pesquisando: todos os da tabela) */
+  function mesesFds() {
+    if (estado.quando === "datas") {
+      var l = [], ns = noites(), fds = ns.filter(ehFds);
+      (fds.length ? fds : ns).forEach(function (d) { var k = chaveMes(d); if (l.indexOf(k) < 0) l.push(k); });
+      return l;
+    }
+    if (estado.quando === "mes") return [estado.mesChave];
+    return null;
+  }
+
+  /* Valor que o quiz pode mostrar, como [menor, maior] — os dois iguais quando
+     o valor é um só. null = sob consulta. Só casal tem valor na tabela.
+     semana: por noite · fds: pacote de 2 diárias · feriado: 3 diárias. */
+  function faixa(u, p) {
+    if (estado.pessoas !== "2") return null;
+    var t = (window.QUIZ_VALORES || {})[u] || {}, v;
+    if (p === "semana") return t.semana > 0 ? [t.semana, t.semana] : null;
+    if (p === "feriado") {
+      v = estado.feriado && (t.feriados || {})[estado.feriado];
+      return v > 0 ? [v, v] : null;
+    }
+    if (p !== "fds") return null;
+    var tab = t.fds || {}, meses = mesesFds(), vals = [];
+    if (meses) {
+      for (var i = 0; i < meses.length; i++) {
+        if (!(tab[meses[i]] > 0)) return null;
+        vals.push(tab[meses[i]]);
+      }
+    } else {
+      var desde = chaveMes(hoje());
+      Object.keys(tab).forEach(function (k) { if (k >= desde && tab[k] > 0) vals.push(tab[k]); });
+    }
+    return vals.length ? [Math.min.apply(null, vals), Math.max.apply(null, vals)] : null;
+  }
+
+  function registrar(dados) {
+    dados.site = "big-bear";
+    dados.pagina = "orcamento";
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(dados);
+    if (location.hostname === "localhost") console.info("[analytics]", dados.event, dados);
+  }
+  function anotar(pergunta, resposta) {
+    registrar({ event: "quiz_resposta", quiz_pergunta: pergunta, quiz_resposta: resposta });
+  }
+
+  /* ---------- navegação ----------
+     Cada passo entra no histórico do navegador: o "voltar" do celular volta
+     uma pergunta em vez de sair da página. */
+  function podeMostrar(passo) {
+    if (!estado.unidade) return passo === "unidade";
+    if (passo === "unidade" || passo === "periodo") return true;
+    if (!estado.periodo) return false;
+    if (passo === "pessoas") return true;
+    if (!estado.pessoas) return false;
+    if (passo === "quando") return true;
+    return !!estado.quando;
+  }
+
+  function ir(passo, opcoes) {
+    opcoes = opcoes || {};
+    if (!podeMostrar(passo)) passo = ORDEM[0];
+    if (passo === "quando") montarQuando();
+    if (passo === "valor") montarValor();
+    if (passo === "semana") montarSemana();
+    if (passo === "pronto") montarPronto();
+    if (passo === "fora") montarFora();
+    passos.forEach(function (s) { s.hidden = s.getAttribute("data-step") !== passo; });
+    atual = passo;
+    if (opcoes.historico !== false) history.pushState({ qz: passo }, "");
+    atualizarTopo();
+    if (opcoes.focar !== false) focar();
+  }
+
+  function atualizarTopo() {
+    var i = ORDEM.indexOf(atual), pos;
+    if (atual === "semana") pos = PERGUNTAS + 0.5;
+    else if (i >= 0) pos = i;
+    else pos = PERGUNTAS + 1;
+    $("qzBarra").style.width = Math.round((pos + 1) / (PERGUNTAS + 2) * 100) + "%";
+    $("qzPasso").textContent =
+      i >= 0 && i < PERGUNTAS ? "Pergunta " + (i + 1) + " de " + PERGUNTAS :
+      atual === "valor" || atual === "semana" ? "Seu valor" :
+      atual === "pronto" ? "Pronto" : "";
+    $("qzVoltar").hidden = atual === ORDEM[0];
+  }
+
+  /* depois da primeira resposta a foto do topo já cumpriu o papel: cada passo
+     novo sobe até o cartão, para a pergunta e as opções caberem na tela */
+  function focar() {
+    if (Math.abs(quiz.getBoundingClientRect().top) > 16) {
+      quiz.scrollIntoView({ behavior: reduzMovimento ? "auto" : "smooth", block: "start" });
+    }
+    var h = quiz.querySelector('.qz-step:not([hidden]) h2');
+    if (h) h.focus({ preventScroll: true });
+  }
+
+  $("qzVoltar").addEventListener("click", function () { history.back(); });
+  window.addEventListener("popstate", function (e) {
+    if (e.state && e.state.qz) ir(e.state.qz, { historico: false });
+  });
+
+  /* ---------- respostas ---------- */
+  function botoesDiretos(grupo) {
+    return Array.prototype.filter.call(grupo.children, function (c) { return c.classList.contains("qz-op"); });
+  }
+  function marcar(grupo, op) {
+    botoesDiretos(grupo).forEach(function (b) { b.setAttribute("aria-pressed", b === op ? "true" : "false"); });
+  }
+
+  quiz.addEventListener("click", function (e) {
+    var op = e.target.closest(".qz-op");
+    if (!op) return;
+    var grupo = op.parentNode.closest("[data-pergunta]");
+    if (!grupo || botoesDiretos(grupo).indexOf(op) === -1) return;
+    marcar(grupo, op);
+    responder(grupo.getAttribute("data-pergunta"), op.getAttribute("data-valor"));
+  });
+
+  function responder(pergunta, valor) {
+    switch (pergunta) {
+      case "unidade":
+        estado.unidade = valor; anotar(pergunta, valor); ir("periodo"); break;
+      case "periodo":
+        /* feriado tem outra pergunta no passo das datas: a resposta antiga não vale mais */
+        if ((valor === "feriado") !== (estado.periodo === "feriado")) {
+          estado.quando = estado.feriado = null;
+          quiz.querySelectorAll('[data-step="quando"] .qz-op[aria-pressed]').forEach(function (b) { b.removeAttribute("aria-pressed"); });
+        }
+        estado.periodo = valor; anotar(pergunta, valor); ir("pessoas"); break;
+      case "pessoas":
+        estado.pessoas = valor; anotar(pergunta, valor); ir("quando"); break;
+      case "quando":
+        if (valor === "pesquisando") {
+          estado.quando = "pesquisando";
+          estado.chegada = estado.saida = estado.mes = null;
+          abrirPainel(null);
+          anotar(pergunta, valor);
+          irParaValor();
+        } else {
+          abrirPainel(valor);
+        }
+        break;
+      case "mes":
+        estado.quando = "mes"; estado.mesChave = valor; estado.mes = MESES[+valor.slice(5) - 1] + " de " + valor.slice(0, 4);
+        estado.chegada = estado.saida = null;
+        anotar("quando", "mes");
+        irParaValor();
+        break;
+      case "feriado":
+        estado.quando = "feriado"; estado.feriado = valor;
+        estado.chegada = estado.saida = estado.mes = estado.mesChave = null;
+        anotar(pergunta, valor);
+        irParaValor();
+        break;
+      case "faixa":
+        decidirFaixa(valor); break;
+      case "semana":
+        anotar(pergunta, valor);
+        if (valor === "sim") {
+          estado.foiParaSemana = true; estado.queria = estado.periodoFinal;
+          estado.periodoFinal = "semana"; estado.faixaOk = "sim";
+          concluir(true);
+        } else {
+          concluir(false);
+        }
+        break;
+    }
+  }
+
+  /* ---------- datas e mês ---------- */
+  var botaoDatas = quiz.querySelector('[data-valor="datas"]');
+  var botaoMes = quiz.querySelector('[data-valor="mes"]');
+  var erroDatas = $("qzErroDatas");
+
+  function abrirPainel(qual) {
+    [[botaoDatas, $("qzPainelDatas"), "datas"], [botaoMes, $("qzPainelMes"), "mes"]].forEach(function (p) {
+      var abrir = p[2] === qual && p[1].hidden;
+      p[1].hidden = !abrir;
+      p[0].setAttribute("aria-expanded", abrir ? "true" : "false");
+      if (abrir && p[1].scrollIntoView) p[1].scrollIntoView({ block: "nearest", behavior: reduzMovimento ? "auto" : "smooth" });
+    });
+  }
+
+  /* ---------- calendário ----------
+     Primeiro toque marca a chegada, o segundo a saída (como no Booking).
+     Os campos "Chegada" e "Saída" no alto mostram a data em dd/mm/aaaa e,
+     tocados, deixam corrigir só um dos lados. Vai até 12 meses à frente. */
+  var DIAS_LONGOS = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"];
+  var calDias = $("qzCalDias"), campoChegada = $("qzCampoChegada"), campoSaida = $("qzCampoSaida");
+  var cal;
+
+  function inicioMes(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+  function mesmoDia(a, b) { return !!a && !!b && a.getTime() === b.getTime(); }
+  function dataBR(d) { return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + "/" + d.getFullYear(); }
+  function limiteCal() { var h = hoje(); return new Date(h.getFullYear(), h.getMonth() + 13, 0); }
+  function nomeMes(d) { var n = MESES[d.getMonth()]; return n.charAt(0).toUpperCase() + n.slice(1) + " de " + d.getFullYear(); }
+  function noitesCal() { return Math.round((cal.saida - cal.chegada) / 864e5); }
+
+  function zerarCal() {
+    /* escolhendo: o que o próximo toque marca. ajuste: a pessoa tocou em
+       "Chegada" para corrigir, então a saída já escolhida fica, se ainda couber */
+    cal = { chegada: null, saida: null, escolhendo: "chegada", ajuste: false, mes: inicioMes(hoje()), foco: null };
+  }
+
+  /* o único dia do mês que recebe o Tab; as setas andam entre os outros */
+  function diaDoTab(n) {
+    var h = hoje(), m = cal.mes, l = [cal.foco, cal.escolhendo === "saida" ? cal.saida : null, cal.chegada, h];
+    for (var i = 0; i < l.length; i++) {
+      if (l[i] && l[i].getMonth() === m.getMonth() && l[i].getFullYear() === m.getFullYear() && l[i] >= h) return l[i];
+    }
+    return m < h ? h : m;
+  }
+
+  function preencherCampo(botao, rotulo, d, ativo) {
+    botao.innerHTML = "<small>" + rotulo + (d ? " · " + DIAS[d.getDay()] : "") + "</small>" +
+      (d ? "<b>" + dataBR(d) + "</b>" : '<b class="vazio">dd/mm/aaaa</b>');
+    botao.setAttribute("aria-pressed", ativo ? "true" : "false");
+  }
+
+  function desenharCal(focarDia) {
+    var h = hoje(), lim = limiteCal(), m = cal.mes;
+    var total = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+    var alvo = diaDoTab(total), html = "";
+    for (var i = 0; i < m.getDay(); i++) html += "<span></span>";
+    for (var dia = 1; dia <= total; dia++) {
+      var d = new Date(m.getFullYear(), m.getMonth(), dia);
+      var ini = mesmoDia(d, cal.chegada), fim = mesmoDia(d, cal.saida), cls = "qz-dia";
+      if (ini) cls += " ini" + (cal.saida ? " com-fim" : "");
+      if (fim) cls += " fim";
+      if (cal.chegada && cal.saida && d > cal.chegada && d < cal.saida) cls += " meio";
+      if (mesmoDia(d, h)) cls += " hoje";
+      html += '<button type="button" class="' + cls + '" data-dia="' + paraCampo(d) + '" aria-label="' +
+        DIAS_LONGOS[d.getDay()] + ", " + dia + " de " + MESES[d.getMonth()] + " de " + d.getFullYear() +
+        (ini ? ", chegada" : fim ? ", saída" : "") + '" aria-pressed="' + (ini || fim) + '" tabindex="' +
+        (mesmoDia(d, alvo) ? "0" : "-1") + '"' + (d < h || d > lim ? " disabled" : "") + "><span>" + dia + "</span></button>";
+    }
+    calDias.innerHTML = html;
+    $("qzCalMes").textContent = nomeMes(m);
+    $("qzCalAnt").disabled = m <= inicioMes(h);
+    $("qzCalProx").disabled = m >= inicioMes(lim);
+    /* com as duas datas marcadas, nenhum campo fica em destaque — só quando a
+       pessoa toca num deles para corrigir */
+    var completo = cal.chegada && cal.saida && !cal.ajuste;
+    preencherCampo(campoChegada, "Chegada", cal.chegada, cal.escolhendo === "chegada" && !completo);
+    preencherCampo(campoSaida, "Saída", cal.saida, cal.escolhendo === "saida");
+
+    var n = cal.chegada && cal.saida ? noitesCal() : 0;
+    $("qzCalStatus").textContent =
+      n ? n + (n === 1 ? " noite" : " noites") + ", de " + dataCurta(cal.chegada) + " a " + dataCurta(cal.saida) + "." :
+      cal.escolhendo === "saida" ? "Agora toque no dia da saída." : "Toque no dia da chegada.";
+
+    if (focarDia) {
+      var b = calDias.querySelector('[tabindex="0"]');
+      if (b) b.focus({ preventScroll: true });
+    }
+  }
+
+  function escolherDia(d) {
+    if (cal.escolhendo === "saida" && cal.chegada && d > cal.chegada) {
+      cal.saida = d;
+      cal.escolhendo = "chegada";
+    } else {
+      if (!cal.ajuste || (cal.saida && cal.saida <= d)) cal.saida = null;
+      cal.chegada = d;
+      cal.escolhendo = cal.saida ? "chegada" : "saida";
+    }
+    cal.ajuste = false;
+    cal.foco = d;
+    erroDatas.hidden = true;
+    desenharCal(true);
+    /* com as duas datas marcadas, o botão "Ver o valor" precisa aparecer */
+    if (cal.chegada && cal.saida) {
+      $("qzDatasOk").scrollIntoView({ block: "nearest", behavior: reduzMovimento ? "auto" : "smooth" });
+    }
+  }
+
+  function mudarMes(delta) {
+    cal.mes = new Date(cal.mes.getFullYear(), cal.mes.getMonth() + delta, 1);
+    cal.foco = null;
+    desenharCal(false);
+  }
+
+  calDias.addEventListener("click", function (e) {
+    var b = e.target.closest(".qz-dia");
+    if (b && !b.disabled) escolherDia(lerData(b.getAttribute("data-dia")));
+  });
+  calDias.addEventListener("keydown", function (e) {
+    var b = e.target.closest(".qz-dia");
+    if (!b) return;
+    var d = lerData(b.getAttribute("data-dia")), salto = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key], novo;
+    if (salto) novo = somaDias(d, salto);
+    else if (e.key === "PageUp" || e.key === "PageDown") novo = new Date(d.getFullYear(), d.getMonth() + (e.key === "PageUp" ? -1 : 1), d.getDate());
+    else return;
+    e.preventDefault();
+    var h = hoje(), lim = limiteCal();
+    novo = novo < h ? h : novo > lim ? lim : novo;
+    cal.foco = novo;
+    cal.mes = inicioMes(novo);
+    desenharCal(true);
+  });
+  $("qzCalAnt").addEventListener("click", function () { mudarMes(-1); });
+  $("qzCalProx").addEventListener("click", function () { mudarMes(1); });
+  campoChegada.addEventListener("click", function () {
+    cal.escolhendo = "chegada";
+    cal.ajuste = !!cal.saida;
+    if (cal.chegada) cal.mes = inicioMes(cal.chegada);
+    cal.foco = null;
+    desenharCal(false);
+  });
+  campoSaida.addEventListener("click", function () {
+    if (cal.chegada) cal.escolhendo = "saida";
+    if (cal.saida || cal.chegada) cal.mes = inicioMes(cal.saida || cal.chegada);
+    cal.foco = null;
+    desenharCal(false);
+  });
+  zerarCal();
+  desenharCal(false);
+
+  $("qzDatasOk").addEventListener("click", function () {
+    var c = cal.chegada, s = cal.saida;
+    var erro = !c ? "Toque no dia da chegada no calendário." :
+               !s ? "Agora toque no dia da saída no calendário." :
+               c < hoje() ? "A chegada não pode ser uma data que já passou." : "";
+    if (erro) { erroDatas.textContent = erro; erroDatas.hidden = false; return; }
+    erroDatas.hidden = true;
+    estado.quando = "datas"; estado.chegada = c; estado.saida = s; estado.mes = null;
+    marcar(botaoDatas.parentNode, botaoDatas);
+    anotar("quando", "datas");
+    irParaValor();
+  });
+
+  (function montarMeses() {
+    var h = hoje(), inicio = h.getDate() > 20 ? 1 : 0, html = "";
+    for (var i = 0; i < 8; i++) {
+      var m = new Date(h.getFullYear(), h.getMonth() + inicio + i, 1);
+      var nome = MESES[m.getMonth()], ano = m.getFullYear();
+      html += '<button type="button" class="qz-op qz-chip" data-valor="' + chaveMes(m) + '">' +
+        nome.charAt(0).toUpperCase() + nome.slice(1) + (ano !== h.getFullYear() ? " " + ano : "") + "</button>";
+    }
+    $("qzMeses").innerHTML = html;
+  })();
+
+  /* quem escolheu "Feriado" responde qual, em vez de datas: o valor é por feriado */
+  (function montarFeriados() {
+    var h = paraCampo(hoje());
+    $("qzFeriados").innerHTML = QUIZ_FERIADOS
+      .filter(function (f) { return f.noites[f.noites.length - 1] >= h; })
+      .map(function (f) { return botaoOp([f.id, f.nome, f.data]); }).join("") +
+      botaoOp(["outro", "Outro feriado", "Feriado prolongado, emenda"]);
+  })();
+  function montarQuando() {
+    var fer = estado.periodo === "feriado";
+    $("qzH-quando").textContent = fer ? "Qual feriado?" : "Você já tem as datas?";
+    quiz.querySelector('[data-pergunta="quando"]').hidden = fer;
+    $("qzFeriados").hidden = !fer;
+  }
+
+  /* ---------- faixa de valor ---------- */
+  function feriadoDasDatas() {
+    var ns = noites().map(paraCampo);
+    return QUIZ_FERIADOS.filter(function (f) {
+      return f.noites.some(function (n) { return ns.indexOf(n) >= 0; });
+    })[0] || null;
+  }
+
+  /* o período que vale para o preço: as datas mandam sobre a resposta */
+  function definirPeriodo() {
+    var p = estado.periodo;
+    estado.aviso = null;
+    if (estado.quando === "datas") {
+      var fer = feriadoDasDatas();
+      estado.feriado = fer ? fer.id : null;
+      if (fer) {
+        estado.aviso = "Suas datas caem no feriado de " + fer.nome + ". Nesse feriado o valor é para 3 diárias.";
+        p = "feriado";
+      } else {
+        var temFds = noites().some(ehFds);
+        var pelasDatas = temFds ? "fds" : "semana";
+        if (p !== "indef" && p !== pelasDatas) {
+          estado.aviso = temFds
+            ? "Suas datas incluem noite de sexta ou sábado, por isso o valor é o de fim de semana."
+            : "Suas datas caem entre domingo e quinta, por isso o valor é o de dias de semana.";
+        }
+        p = pelasDatas;
+      }
+    }
+    estado.periodoFinal = p;
+  }
+
+  /* Total das datas, só quando dá para somar sem estimar: noites de domingo a
+     quinta pela diária e cada fim de semana completo (sexta E sábado) pelo
+     pacote do mês. Fim de semana pela metade = null, a equipe calcula. */
+  function totalEstadia(u) {
+    if (estado.pessoas !== "2") return null;
+    var t = (window.QUIZ_VALORES || {})[u] || {}, ns = noites(), total = 0;
+    for (var i = 0; i < ns.length; i++) {
+      var dia = ns[i].getDay();
+      if (dia === 5) {
+        var v = (t.fds || {})[chaveMes(ns[i])];
+        if (!ns[i + 1] || !(v > 0)) return null;
+        total += v;
+        i++;                       // o sábado já entrou no pacote
+      } else if (dia === 6) {
+        return null;               // sábado sem a sexta
+      } else {
+        if (!(t.semana > 0)) return null;
+        total += t.semana;
+      }
+    }
+    return total;
+  }
+  function fdsIncompleto() {
+    var ns = noites();
+    return ns.some(function (d, i) { return (d.getDay() === 5 && !ns[i + 1]) || (d.getDay() === 6 && i === 0); });
+  }
+
+  /* linha extra sob o valor: o total das datas escolhidas ou, na diária de
+     semana, quanto saem 2 diárias — para comparar com o pacote do fim de semana */
+  function complemento(u, p, f, comTotal) {
+    if (!f) return "";
+    var n = estado.quando === "datas" ? noites().length : 0;
+    if (comTotal && n && p === estado.periodoFinal && p !== "feriado") {
+      var t = totalEstadia(u);
+      /* só um fim de semana: o total é o próprio pacote, não repete */
+      return t && n > 1 && !(f[0] === f[1] && t === f[0]) ? "Total para " + n + " noites: " + reais(t) : "";
+    }
+    return p === "semana" && f[0] === f[1] ? "2 diárias: " + reais(f[0] * 2) : "";
+  }
+
+  function rotuloCartao(p) {
+    if (p === "semana") return "Durante a semana <small>· domingo a quinta</small>";
+    if (p === "fds") {
+      var m = mesesFds();
+      return "Fim de semana <small>· " + (m ? m.map(nomeMesChave).join(" e ") : "conforme o mês") + "</small>";
+    }
+    var fer = feriadoAtual();
+    return fer ? "Feriado de " + fer.nome + " <small>· " + fer.data + "</small>" : "Feriado";
+  }
+  function rodapeCartao(p) {
+    var quem = PARA_PESSOAS[estado.pessoas];
+    if (p === "semana") return "Por noite, " + quem + ".";
+    if (p === "fds") return "Pacote de 2 diárias (sexta e sábado), " + quem + ".";
+    return "Valor das 3 diárias, " + quem + ".";
+  }
+
+  function cartaoFaixas(us, periodos, comTotal) {
+    return periodos.map(function (p) {
+      /* nenhuma unidade com número: um "sob consulta" só, sem repetir por pousada */
+      var dados = us.map(function (u) {
+        var f = faixa(u, p);
+        return { nome: UNIDADES[u].nome, f: f, extra: complemento(u, p, f, comTotal) };
+      });
+      /* mesmo valor (ou nenhum) em todas: uma linha só, sem repetir por pousada */
+      var chave = function (d) { return (d.f ? textoFaixa(d.f) : "") + "|" + d.extra; };
+      if (dados.length > 1 && dados.every(function (d) { return chave(d) === chave(dados[0]); })) {
+        dados = [{ nome: dados[0].f ? "Nas duas pousadas" : "", f: dados[0].f, extra: dados[0].extra }];
+      }
+      var linhas = dados.map(function (d) {
+        return '<div class="qz-linha">' +
+          (us.length > 1 && d.nome ? '<span class="qz-un">' + d.nome + "</span>" : "") +
+          '<strong class="qz-num' + (d.f ? "" : " consulta") + '">' + (d.f ? textoFaixa(d.f) : "Valor sob consulta") + "</strong>" +
+          (d.extra ? '<span class="qz-total">' + d.extra + "</span>" : "") +
+          "</div>";
+      }).join("");
+      return '<div class="qz-faixa">' +
+        '<p class="qz-faixa-rot">' + rotuloCartao(p) + "</p>" +
+        linhas +
+        '<p class="qz-faixa-det">' + rodapeCartao(p) + "</p>" +
+        "</div>";
+    }).join("");
+  }
+
+  function vantagens(us) {
+    if (us.length !== 1 || !UNIDADES[us[0]].vantagens.length) return "";
+    return '<ul class="qz-vant">' + UNIDADES[us[0]].vantagens.map(function (v) { return "<li>" + v + "</li>"; }).join("") + "</ul>";
+  }
+
+  function avisoPacote() {
+    if (estado.periodoFinal !== "fds" || estado.quando !== "datas" || !fdsIncompleto()) return "";
+    return '<p class="qz-aviso">O valor de fim de semana é o pacote de 2 diárias, sexta e sábado. ' +
+      "Para as suas datas, a equipe confirma o valor.</p>";
+  }
+
+  function botaoOp(o) {
+    return '<button type="button" class="qz-op" data-valor="' + o[0] + '"><b>' + o[1] + "</b>" +
+      (o[2] ? "<span>" + o[2] + "</span>" : "") + "</button>";
+  }
+
+  function montarValor() {
+    definirPeriodo();
+    estado.foiParaSemana = false;
+    estado.faixaOk = null;
+    var us = unidadesEmJogo(), pf = estado.periodoFinal;
+    var periodos = pf === "indef" ? ["fds", "semana"] : [pf];
+    var tem = function (p) { return us.some(function (u) { return faixa(u, p); }); };
+    estado.temValor = periodos.some(tem);
+    /* fim de semana (ou feriado) ainda sem número, mas dias de semana com:
+       já mostra a alternativa, que é o que a pousada quer vender */
+    var sugereSemana = !estado.temValor && pf !== "semana" && pf !== "indef" && tem("semana");
+    /* valor fixo (mínimo = máximo) não é "aproximado" nem "faixa" */
+    var mostradas = [];
+    periodos.concat(sugereSemana ? ["semana"] : []).forEach(function (p) {
+      us.forEach(function (u) { if (faixa(u, p)) mostradas.push(faixa(u, p)); });
+    });
+    var fixo = mostradas.length && mostradas.every(function (f) { return f[0] === f[1]; });
+
+    $("qzValor").innerHTML =
+      cartaoFaixas(us, periodos, true) +
+      (estado.aviso ? '<p class="qz-aviso">' + estado.aviso + "</p>" : "") +
+      avisoPacote() +
+      (sugereSemana ? '<p class="qz-texto">Se puder vir durante a semana, a diária fica em:</p>' + cartaoFaixas(us, ["semana"], false) : "") +
+      vantagens(us) +
+      '<p class="qz-nota">' + (
+        fixo ? "A equipe confirma a disponibilidade para a sua data." :
+        mostradas.length ? "O valor do fim de semana muda conforme o mês. Com a data, a equipe confirma o valor exato." :
+        "A equipe passa o valor pelo WhatsApp, de acordo com a data e a suíte.") + "</p>";
+
+    var pergunta, ops;
+    if (sugereSemana) {
+      pergunta = "Como prefere seguir?";
+      ops = [["semana", "Posso ir durante a semana", "Quero ver as datas disponíveis"],
+             ["consultar", "Quero saber o valor " + (pf === "feriado" ? "do feriado" : "do fim de semana")],
+             ["nao", "Agora não"]];
+    } else if (!estado.temValor) {
+      pergunta = "Quer que a equipe confirme o valor para a sua data?";
+      ops = [["consultar", "Sim, quero saber o valor"], ["nao", "Agora não"]];
+    } else if (periodos.length === 2 && tem("fds") && tem("semana")) {
+      pergunta = "Qual desses valores cabe no seu orçamento?";
+      ops = [["fds", "O do fim de semana"], ["semana", "O de durante a semana"], ["nenhuma", "Nenhum dos dois, por enquanto"]];
+    } else if (periodos.length === 2) {
+      /* só um dos dois períodos tem número */
+      var conhecido = tem("semana") ? "semana" : "fds";
+      pergunta = "Como prefere seguir?";
+      ops = conhecido === "semana"
+        ? [["semana", "Durante a semana cabe no meu orçamento"], ["consultar-fds", "Quero saber o valor do fim de semana"], ["nenhuma", "Agora não"]]
+        : [["fds", "O fim de semana cabe no meu orçamento"], ["consultar-semana", "Quero saber o valor de dias de semana"], ["nenhuma", "Agora não"]];
+    } else {
+      pergunta = fixo ? "Esse valor faz sentido pra você?" : "Essa faixa de valor faz sentido pra você?";
+      ops = [["sim", "Sim, faz sentido", "Quero verificar a disponibilidade"], ["nao", "Está acima do que eu esperava"]];
+    }
+    $("qzValorPergunta").textContent = pergunta;
+    $("qzValorOps").innerHTML = ops.map(botaoOp).join("");
+  }
+
+  function irParaValor() {
+    ir("valor");
+    registrar({
+      event: "quiz_valor",
+      quiz_unidade: estado.unidade, quiz_periodo: estado.periodoFinal,
+      quiz_pessoas: estado.pessoas, quiz_datas: estado.quando,
+      quiz_tem_valor: estado.temValor ? "sim" : "nao"
+    });
+  }
+
+  function decidirFaixa(valor) {
+    anotar("faixa", valor);
+    if (valor === "sim" || valor.indexOf("consultar") === 0) {
+      if (valor === "consultar-fds") estado.periodoFinal = "fds";
+      if (valor === "consultar-semana") estado.periodoFinal = "semana";
+      estado.faixaOk = valor === "sim" ? "sim" : "sem-valor";
+      concluir(true);
+    } else if (valor === "fds" || valor === "semana") {
+      /* queria fim de semana ou feriado e aceitou dias de semana */
+      if (valor === "semana" && (estado.periodoFinal === "fds" || estado.periodoFinal === "feriado")) {
+        estado.foiParaSemana = true; estado.queria = estado.periodoFinal;
+      }
+      estado.periodoFinal = valor; estado.faixaOk = "sim";
+      concluir(true);
+    } else {
+      estado.faixaOk = "nao";
+      var temSemana = unidadesEmJogo().some(function (u) { return faixa(u, "semana"); });
+      if (valor === "nao" && estado.temValor && estado.periodoFinal !== "semana" && temSemana) ir("semana");
+      else concluir(false);
+    }
+  }
+
+  /* oferta de dias de semana para quem achou o fim de semana caro */
+  function montarSemana() {
+    var us = unidadesEmJogo();
+    $("qzSemana").innerHTML =
+      '<p class="qz-texto">De domingo a quinta, a diária fica em:</p>' +
+      cartaoFaixas(us, ["semana"], false) +
+      vantagens(us) +
+      '<p class="qz-texto" style="margin-top:12px">Campos do Jordão fica mais tranquila fora do fim de semana, e a equipe te ajuda a escolher os dias.</p>';
+  }
+
+  /* ---------- resultado ---------- */
+  function concluir(qualificado) {
+    registrar({
+      event: "quiz_resultado",
+      quiz_qualificado: qualificado ? "sim" : "nao",
+      quiz_unidade: estado.unidade, quiz_periodo: estado.periodoFinal,
+      quiz_pessoas: estado.pessoas, quiz_datas: estado.quando,
+      quiz_foi_para_semana: estado.foiParaSemana ? "sim" : "nao"
+    });
+    ir(qualificado ? "pronto" : "fora");
+  }
+
+  function textoPeriodo(naMensagem) {
+    if (estado.foiParaSemana) {
+      var fer = estado.queria === "feriado" ? feriadoAtual() : null;
+      var antes = estado.queria === "feriado" ? "no feriado" + (fer ? " de " + fer.nome : "") : "em fim de semana";
+      return "Durante a semana (domingo a quinta)" + (naMensagem ? ". Pensava " + antes + ", mas posso mudar" : "");
+    }
+    var p = estado.periodoFinal;
+    if (p === "indef") return "Ainda não decidi entre fim de semana e dias de semana";
+    if (p === "feriado") {
+      var fer = feriadoAtual();
+      return fer ? "Feriado de " + fer.nome + " (" + fer.data + ")" : "Feriado";
+    }
+    return PERIODO[p].nome + (PERIODO[p].det ? " (" + PERIODO[p].det + ")" : "");
+  }
+  function textoDatas() {
+    if (estado.quando === "datas") {
+      var n = noites().length;
+      var t = dataCurta(estado.chegada) + " a " + dataCurta(estado.saida) + ", " + n + (n === 1 ? " noite" : " noites");
+      /* trocou o fim de semana por dias de semana: as datas eram só a ideia inicial */
+      return estado.foiParaSemana ? "Tinha pensado em " + t : t;
+    }
+    if (estado.quando === "mes") return "Em " + estado.mes + ", sem dia definido";
+    return "Ainda não definidas";
+  }
+  /* o valor que a pessoa aceitou, por extenso: "R$ 1.600 o fim de semana (2 diárias)" */
+  function textoValor(u) {
+    var p = estado.periodoFinal, f = p === "indef" ? null : faixa(u, p);
+    if (!f) return "";
+    var t = estado.quando === "datas" && !estado.foiParaSemana && p !== "feriado" && noites().length > 1 ? totalEstadia(u) : null;
+    if (t) return reais(t) + " no total, para " + noites().length + " noites";
+    return textoFaixa(f) + (
+      p === "semana" ? " por noite" :
+      p === "fds" ? " o fim de semana (2 diárias)" + (f[0] !== f[1] ? ", conforme o mês" : "") :
+      " o feriado (3 diárias)");
+  }
+
+  /* A mensagem chega estruturada para a IA e para a equipe: ninguém precisa
+     perguntar de novo pousada, datas e número de pessoas. */
+  function mensagem(u, qualificado) {
+    var l = ["Olá! Fiz o quiz de orçamento no site.", ""];
+    l.push("*Pousada:* " + UNIDADES[u].nome);
+    l.push("*Quando:* " + textoPeriodo(true));
+    l.push("*Datas:* " + textoDatas());
+    l.push("*Pessoas:* " + PESSOAS[estado.pessoas]);
+    if (qualificado) {
+      var v = textoValor(u);
+      if (estado.faixaOk === "sim" && v) l.push("*Valor que vi:* " + v + ", dentro do que eu esperava");
+      l.push("", estado.faixaOk === "sem-valor" ? "Pode me passar o valor e a disponibilidade?" : "Pode verificar a disponibilidade?");
+    } else {
+      l.push("", "A faixa de valor ficou acima do que eu esperava, mas queria conversar.");
+    }
+    return l.join("\n");
+  }
+
+  function linkWhats(u, qualificado, rotulo, classe) {
+    var href = "https://api.whatsapp.com/send?phone=" + UNIDADES[u].whatsapp + "&text=" + encodeURIComponent(mensagem(u, qualificado));
+    return '<a class="' + classe + '" href="' + href + '" target="_blank" rel="noopener" data-unidade="' + u +
+      '" data-cta="' + (qualificado ? "quiz-qualificado" : "quiz-fora-da-faixa") + '">' +
+      (qualificado ? ICONE_WA : "") + rotulo + "</a>";
+  }
+
+  function montarPronto() {
+    var us = unidadesEmJogo();
+    var itens = [
+      ["Pousada", us.length > 1 ? "Ainda escolhendo entre as duas" : UNIDADES[us[0]].nome],
+      ["Quando", textoPeriodo(false)],
+      ["Datas", textoDatas()],
+      ["Pessoas", PESSOAS[estado.pessoas]]
+    ];
+    var v = us.length === 1 && estado.faixaOk === "sim" ? textoValor(us[0]) : "";
+    if (v) itens.push(["Valor", v]);
+    $("qzResumo").innerHTML = itens.map(function (i) { return "<dt>" + i[0] + "</dt><dd>" + i[1] + "</dd>"; }).join("");
+    $("qzCtas").innerHTML = us.map(function (u) {
+      return linkWhats(u, true, us.length > 1 ? "Falar com a " + UNIDADES[u].nome : "Verificar disponibilidade no WhatsApp", "btn btn-wa");
+    }).join("");
+  }
+
+  function montarFora() {
+    var us = unidadesEmJogo();
+    $("qzFora").innerHTML = us.length > 1
+      ? "Prefere falar com a equipe mesmo assim? " + us.map(function (u) { return linkWhats(u, false, UNIDADES[u].nome, "qz-link"); }).join(" · ")
+      : linkWhats(us[0], false, "Prefiro falar com a equipe mesmo assim", "qz-link");
+  }
+
+  /* ---------- refazer ---------- */
+  function limpar() {
+    zerar();
+    quiz.querySelectorAll(".qz-op[aria-pressed]").forEach(function (b) { b.removeAttribute("aria-pressed"); });
+    abrirPainel(null);
+    zerarCal();
+    desenharCal(false);
+    erroDatas.hidden = true;
+  }
+  quiz.querySelectorAll("[data-refazer]").forEach(function (b) {
+    b.addEventListener("click", function () { limpar(); ir(ORDEM[0]); });
+  });
+
+  /* ---------- início ---------- */
+  zerar();
+  if (FIXA) $("qzNomeTitulo").textContent = UNIDADES[FIXA].nome;
+  $("qzNPerguntas").textContent = PERGUNTAS;
+  history.replaceState({ qz: ORDEM[0] }, "");
+  ir(ORDEM[0], { historico: false, focar: false });
+})();
+</script>
+<script>window.PAGINA = { id: "orcamento", unidade: window.UNIDADE_URL };</script>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

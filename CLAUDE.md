@@ -7,6 +7,7 @@ Site estático de três páginas, publicado na Vercel em
 index.html        home da marca, apresenta as duas pousadas
 big-bear-1.html   /big-bear-1 — Av. Antonio Nicola Padula, 141
 big-bear-2.html   /big-bear-2 — Av. Emílio Ribas, 1074
+orcamento.html    /orcamento — quiz que filtra o visitante antes do WhatsApp
 assets/estilo.css CSS das três páginas
 assets/site.js    carrosséis, galeria, lightbox, menu e rastreio de cliques
 fotos/otim/       fotos antigas da Big Bear 1 (hero e seções), em AVIF e WebP
@@ -91,3 +92,32 @@ container. As tags do Google Ads também são montadas lá, com acionador de *ev
 condição na variável de camada de dados `unidade`.
 
 Cada evento leva também `local` (qual botão, vem do `data-cta`) e `pagina`.
+
+## Quiz de orçamento (`/orcamento`)
+
+Página de funil para os anúncios, fora da busca orgânica (`noindex`). Pergunta
+pousada, período (fim de semana, dias de semana, feriado), número de pessoas e
+datas (ou qual feriado), mostra o valor e pergunta se ele faz sentido. Só quem diz que
+sim recebe o WhatsApp em destaque, com a mensagem já preenchida com as
+respostas — a IA e a equipe não precisam perguntar de novo. Quem escolheu fim
+de semana e achou caro recebe a oferta de dias de semana antes de sair.
+
+- **Valores:** bloco `QUIZ_VALORES` no fim de `orcamento.html` — diária de
+  semana, pacote de fim de semana por mês (`"aaaa-mm"`) e valor de cada
+  feriado; as noites de cada feriado ficam em `QUIZ_FERIADOS`. Vêm do plano
+  tarifário da pousada (só a coluna "Tarifa", nunca a "Mínima"). O que falta
+  vira "valor sob consulta" — o quiz nunca estima. Fonte, decisões e
+  pendências em `docs/operacao-pousada.md` ("Valores do quiz").
+- **Datas:** calendário próprio, sempre dd/mm/aaaa. Não use
+  `<input type="date">`: ele segue o idioma do aparelho e mostra mm/dd/aaaa
+  em celular configurado em inglês.
+- **Fatos por unidade:** objeto `UNIDADES` no mesmo script. Só entra fato
+  confirmado em `docs/`.
+- **Link por conta de Ads:** `/orcamento?unidade=big-bear-1` ou
+  `?unidade=big-bear-2` pula a pergunta da pousada.
+- **dataLayer:** `quiz_resposta` (a cada resposta), `quiz_valor` (viu a
+  faixa), `quiz_resultado` com `quiz_qualificado` `"sim"`/`"nao"`. O clique
+  no WhatsApp sai como o `clique_whatsapp` de sempre, com `local`
+  `quiz-qualificado` ou `quiz-fora-da-faixa`. A conversão do Ads para esta
+  página deve contar só `quiz-qualificado` — é isso que ensina o lance
+  automático a buscar gente que aceita o preço.

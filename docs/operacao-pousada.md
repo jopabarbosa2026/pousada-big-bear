@@ -190,3 +190,82 @@ página mantém o número da sua própria unidade.
 6. **Depoimentos.** Os nove depoimentos exibidos vieram do site anterior, sem
    plataforma nem data. A regra do projeto pede nome como aparece na
    plataforma, plataforma, mês/ano e link do perfil. Sem isso, eles saem.
+
+---
+
+# Valores do quiz (`/orcamento`) — as duas unidades
+
+O quiz de orçamento (`orcamento.html`) mostra o valor antes de o visitante
+chamar no WhatsApp. Os números ficam no bloco `QUIZ_VALORES` (e as datas dos
+feriados em `QUIZ_FERIADOS`), no fim do arquivo. Onde não há número, o quiz
+mostra "valor sob consulta" — nunca estima.
+
+**Fonte:** os dois planos tarifários da pousada, "Tarifa convencional" e
+"Feriados e eventos", de outubro/2026 a junho/2027, enviados pelo João em
+2026-10-29. Decisões dele no mesmo dia:
+
+- **Dias de semana:** **R$ 350 por noite, fixo, o ano todo**, nas duas
+  pousadas. O plano traz outro valor por mês na linha "Semana" (ex.: novembro
+  BB1 R$ 390, BB2 R$ 420; dezembro R$ 590 e R$ 540), e o João preferiu manter
+  os R$ 350. Em dezembro, janeiro, abril, maio e junho isso fica abaixo da
+  "Mínima" do plano — foi uma escolha consciente.
+- **O hóspede vê só a coluna "Tarifa".** A "Mínima" é margem de negociação da
+  equipe e não aparece no quiz.
+- **Só casal (1 ou 2 pessoas) tem valor.** 3, 4 ou mais pessoas: sob consulta.
+
+**Fim de semana** — pacote de 2 diárias (noites de sexta e sábado), tarifa
+do plano:
+
+| Mês | Big Bear 1 | Big Bear 2 |
+| --- | --- | --- |
+| out/2026 | R$ 1.400 | R$ 1.680 |
+| nov/2026 | R$ 1.600 | R$ 1.700 |
+| dez/2026 | R$ 1.900 | R$ 1.800 |
+| jan/2027 | R$ 1.700 | R$ 1.770 |
+| fev/2027 | R$ 1.400 | R$ 1.390 |
+| mar/2027 | R$ 1.100 | R$ 1.320 |
+| abr/2027 | R$ 1.500 | R$ 1.660 |
+| mai/2027 | R$ 2.000 | R$ 1.800 |
+| jun/2027 | R$ 2.200 | R$ 2.600 |
+
+**Feriados** — valor para 3 diárias, tarifa do plano:
+
+| Feriado | Big Bear 1 | Big Bear 2 |
+| --- | --- | --- |
+| Natal | R$ 3.300 | R$ 3.000 |
+| Ano Novo | R$ 5.400 | R$ 5.500 |
+| Carnaval | R$ 3.000 | R$ 3.100 |
+| Páscoa | R$ 3.810 | R$ 4.200 |
+| Tiradentes | R$ 3.000 | sob consulta (ver pendências) |
+| Corpus Christi | sob consulta (fora do plano) | R$ 5.999 |
+
+1º de maio/2027 cai num sábado e, pelo plano, segue a tarifa convencional.
+
+**Como o quiz usa as datas:** se a estadia escolhida no calendário tem uma
+noite de feriado, vale o valor do feriado. As noites que contam são uma
+escolha do quiz, não do plano: Natal 24 e 25/12; Ano Novo 31/12; Carnaval 6,
+7 e 8/02/2027; Páscoa 25, 26 e 27/03/2027; Tiradentes 20 e 21/04/2027;
+Corpus Christi 26 a 29/05/2027. Fora disso, cada noite de domingo a quinta
+conta R$ 350 e cada fim de semana completo (sexta **e** sábado) conta o
+pacote do mês. Com só uma das duas noites do fim de semana, o quiz mostra o
+pacote e diz que a equipe confirma o valor.
+
+**Pendente com o João:**
+
+1. Julho, agosto e setembro de 2027: fora do plano. Nesses meses o fim de
+   semana aparece como sob consulta. A temporada de inverno precisa entrar
+   antes de os anúncios levarem gente para essas datas.
+2. Tiradentes na Big Bear 2: o plano diz "3 diárias", R$ 590 e "cai no dia de
+   semana / diária convencional" ao mesmo tempo. É R$ 590 por noite?
+3. Corpus Christi na Big Bear 1: não está no plano.
+4. Quais noites cada pacote de feriado cobre (a lista acima é provisória).
+5. 3 e 4 pessoas: o plano só cita "+50% de cama extra" no Natal e no Ano Novo
+   da Big Bear 2. Vale para o ano todo?
+
+Ao trocar a tabela (nova temporada, novo plano), atualize `QUIZ_VALORES`,
+`QUIZ_FERIADOS` e esta seção, com a data e quem passou.
+
+Fatos que o quiz já usa, todos da Big Bear 2 e confirmados acima: café da
+manhã incluso, late checkout até 14h na reserva direta e estacionamento
+coberto gratuito. A Big Bear 1 entra sem nenhum deles até a confirmação com o
+gerente.
