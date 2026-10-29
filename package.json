@@ -4,9 +4,11 @@
   "description": "Site estatico das pousadas Big Bear 1 e 2. Os scripts so servem para preparar fotos e montar as galerias - o site em si nao tem build.",
   "scripts": {
     "fotos": "node scripts/otimiza-fotos.js",
-    "galeria": "node scripts/monta-galeria.js && node scripts/copia-orcamento.js",
-    "cards": "node scripts/monta-cards.js && node scripts/copia-orcamento.js",
+    "galeria": "node scripts/monta-galeria.js && npm run --silent copias",
+    "cards": "node scripts/monta-cards.js && npm run --silent copias",
+    "copias": "node scripts/copia-orcamento.js && node scripts/monta-campanhas.js",
     "orcamento": "node scripts/copia-orcamento.js",
+    "campanhas": "node scripts/monta-campanhas.js",
     "folhas": "node scripts/folhas-de-contato.js"
   },
   "devDependencies": {
