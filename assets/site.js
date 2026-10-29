@@ -19,15 +19,9 @@
      dividem o mesmo site. Por isso cada evento carrega "unidade": é o que
      permite, no container GTM-KJ4GH8NC, mandar a conversão para a conta certa.
      Um botão pode sobrescrever a unidade da página com data-unidade — é o caso
-     da home, que oferece as duas pousadas lado a lado.
-
-     Os botões de reserva das páginas não vão direto ao WhatsApp: levam ao quiz
-     /orcamento, que filtra pelo preço (clique_orcamento). O clique_whatsapp só
-     sai de dentro do quiz, com local "quiz-qualificado" ou "quiz-fora-da-faixa". */
-  function identificarEvento(link) {
-    var href = link.href;
+     da home, que oferece as duas pousadas lado a lado. */
+  function identificarEvento(href) {
     if (/^https:\/\/(wa\.me|wa\.link|api\.whatsapp\.com)\//.test(href)) return "clique_whatsapp";
-    if (link.host === location.host && link.pathname === "/orcamento") return "clique_orcamento";
     if (href.indexOf("tel:") === 0) return "clique_telefone";
     if (href.indexOf("mailto:") === 0) return "clique_email";
     if (href.indexOf("google.com/maps") !== -1) return "clique_mapa";
@@ -38,7 +32,7 @@
     var link = e.target.closest && e.target.closest("a[href]");
     if (!link) return;
 
-    var nome = identificarEvento(link);
+    var nome = identificarEvento(link.href);
     if (!nome) return;
 
     var dados = {

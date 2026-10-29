@@ -403,13 +403,9 @@ var QUIZ_FERIADOS = [
      docs/operacao-pousada.md. A Big Bear 1 ainda tem tudo como "publicado, a
      confirmar", por isso fica sem vantagens aqui. */
   var UNIDADES = {
-    "big-bear-1": {
-      nome: "Big Bear 1", whatsapp: "5512996199997", vantagens: [],
-      suites: { "luxo": "Suíte Luxo", "master": "Suíte Master", "superior": "Suíte Superior" }
-    },
+    "big-bear-1": { nome: "Big Bear 1", whatsapp: "5512996199997", vantagens: [] },
     "big-bear-2": {
       nome: "Big Bear 2", whatsapp: "5512996394583",
-      suites: { "deluxe": "Suíte Deluxe", "deluxe-executivo": "Suíte Deluxe Executivo", "conjugada": "Suíte Conjugada" },
       vantagens: [
         "Café da manhã estilo brunch incluso",
         "Late checkout até 14h, sem custo, reservando direto",
@@ -436,12 +432,6 @@ var QUIZ_FERIADOS = [
   var reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var FIXA = window.UNIDADE_URL;
-  /* ?suite=master: o visitante veio do botão "Reservar" de uma suíte. Vai na
-     mensagem do WhatsApp; só nomes da lista acima, nunca o texto da URL. */
-  var SUITE = (function () {
-    var s = new URLSearchParams(location.search).get("suite"), l = FIXA && UNIDADES[FIXA].suites;
-    return l && s && Object.prototype.hasOwnProperty.call(l, s) ? l[s] : null;
-  })();
   var ORDEM = (FIXA ? [] : ["unidade"]).concat(["periodo", "pessoas", "quando", "valor"]);
   var PERGUNTAS = ORDEM.length - 1;
 
@@ -1144,7 +1134,6 @@ var QUIZ_FERIADOS = [
   function mensagem(u, qualificado) {
     var l = ["Olá! Fiz o quiz de orçamento no site.", ""];
     l.push("*Pousada:* " + UNIDADES[u].nome);
-    if (SUITE) l.push("*Suíte:* " + SUITE);
     l.push("*Quando:* " + textoPeriodo(true));
     l.push("*Datas:* " + textoDatas());
     l.push("*Pessoas:* " + PESSOAS[estado.pessoas]);
@@ -1168,7 +1157,7 @@ var QUIZ_FERIADOS = [
   function montarPronto() {
     var us = unidadesEmJogo();
     var itens = [
-      ["Pousada", us.length > 1 ? "Ainda escolhendo entre as duas" : UNIDADES[us[0]].nome + (SUITE ? ", " + SUITE : "")],
+      ["Pousada", us.length > 1 ? "Ainda escolhendo entre as duas" : UNIDADES[us[0]].nome],
       ["Quando", textoPeriodo(false)],
       ["Datas", textoDatas()],
       ["Pessoas", PESSOAS[estado.pessoas]]
