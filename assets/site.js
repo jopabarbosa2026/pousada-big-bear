@@ -13,15 +13,49 @@
 
   var CFG = window.PAGINA || {};
   var UNIDADE = CFG.unidade || null;
+  /* /orcamento é a home servida com outro endereço (rewrite no vercel.json) */
+  var PAGINA_ID = location.pathname === "/orcamento" ? "orcamento" : CFG.id || "desconhecida";
+
+  /* ===== FUNIL DOS ANÚNCIOS (/orcamento) ===================================
+     /orcamento é uma cópia da home para os anúncios do Meta. Ali, e nas
+     páginas que o visitante abrir depois na mesma aba, os botões de WhatsApp
+     levam ao quiz (/quiz), que mostra o valor antes da conversa.
+     Quem chega pelo Google ou digitando o endereço nunca passa por aqui e fala
+     direto no WhatsApp: o site principal não pode mudar, para não mexer nas
+     campanhas do Google Ads (pedido do João, 2026-10-29). */
+  var SUITE_DO_BOTAO = {
+    "acomodacoes-suite-luxo": "luxo", "acomodacoes-suite-master": "master", "acomodacoes-suite-superior": "superior",
+    "acomodacoes-deluxe": "deluxe", "acomodacoes-executivo": "deluxe-executivo", "acomodacoes-conjugada": "conjugada"
+  };
+  var funil = location.pathname === "/orcamento";
+  try {
+    if (funil) sessionStorage.setItem("bb-funil", "1");
+    else funil = sessionStorage.getItem("bb-funil") === "1";
+  } catch (e) { /* sem sessionStorage: o funil vale só no próprio /orcamento */ }
+
+  if (funil && CFG.id !== "quiz") {
+    document.querySelectorAll('a[href^="https://api.whatsapp.com/"]').forEach(function (a) {
+      var u = a.dataset.unidade || UNIDADE;
+      if (!u) return;
+      var s = SUITE_DO_BOTAO[a.dataset.cta];
+      a.href = "/quiz?unidade=" + u + (s ? "&suite=" + s : "");
+      a.removeAttribute("target");
+      a.removeAttribute("rel");
+    });
+  }
 
   /* ===== RASTREIO DE CLIQUES (dataLayer -> Google Tag Manager) ==============
      As duas pousadas têm WhatsApp e conta de Google Ads separados, e agora
      dividem o mesmo site. Por isso cada evento carrega "unidade": é o que
      permite, no container GTM-KJ4GH8NC, mandar a conversão para a conta certa.
      Um botão pode sobrescrever a unidade da página com data-unidade — é o caso
-     da home, que oferece as duas pousadas lado a lado. */
-  function identificarEvento(href) {
+     da home, que oferece as duas pousadas lado a lado.
+     No funil, o botão que leva ao quiz sai como clique_quiz; o clique_whatsapp
+     vem de dentro do quiz, com local "quiz-qualificado" ou "quiz-fora-da-faixa". */
+  function identificarEvento(link) {
+    var href = link.href;
     if (/^https:\/\/(wa\.me|wa\.link|api\.whatsapp\.com)\//.test(href)) return "clique_whatsapp";
+    if (link.host === location.host && link.pathname === "/quiz") return "clique_quiz";
     if (href.indexOf("tel:") === 0) return "clique_telefone";
     if (href.indexOf("mailto:") === 0) return "clique_email";
     if (href.indexOf("google.com/maps") !== -1) return "clique_mapa";
@@ -32,14 +66,14 @@
     var link = e.target.closest && e.target.closest("a[href]");
     if (!link) return;
 
-    var nome = identificarEvento(link.href);
+    var nome = identificarEvento(link);
     if (!nome) return;
 
     var dados = {
       event: nome,
       local: link.dataset.cta || "geral",
       unidade: link.dataset.unidade || UNIDADE || "indefinida",
-      pagina: CFG.id || "desconhecida",
+      pagina: PAGINA_ID,
       site: "big-bear"
     };
 

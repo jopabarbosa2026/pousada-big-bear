@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Quiz de orçamento (/orcamento).
+<!-- Quiz de orçamento (/quiz). Quem chega aqui vem dos botões de /orcamento,
+     a cópia da home usada nos anúncios — o site principal fala direto no WhatsApp.
      Filtra o visitante ANTES do WhatsApp: pergunta pousada, período, número de
      pessoas e datas, mostra a faixa de valor e só oferece o botão de WhatsApp
      em destaque a quem diz que a faixa cabe no orçamento. Quem escolheu fim de
@@ -23,7 +24,7 @@
     var p = new URLSearchParams(location.search).get('unidade') || '';
     var m = p.match(/^(?:big-bear-|bb)?([12])$/i);
     window.UNIDADE_URL = m ? 'big-bear-' + m[1] : null;
-    var d = {site: 'big-bear', pagina: 'orcamento'};
+    var d = {site: 'big-bear', pagina: 'quiz'};
     if (window.UNIDADE_URL) d.unidade = window.UNIDADE_URL;
     dataLayer.push(d);
   })();
@@ -403,9 +404,13 @@ var QUIZ_FERIADOS = [
      docs/operacao-pousada.md. A Big Bear 1 ainda tem tudo como "publicado, a
      confirmar", por isso fica sem vantagens aqui. */
   var UNIDADES = {
-    "big-bear-1": { nome: "Big Bear 1", whatsapp: "5512996199997", vantagens: [] },
+    "big-bear-1": {
+      nome: "Big Bear 1", whatsapp: "5512996199997", vantagens: [],
+      suites: { "luxo": "Suíte Luxo", "master": "Suíte Master", "superior": "Suíte Superior" }
+    },
     "big-bear-2": {
       nome: "Big Bear 2", whatsapp: "5512996394583",
+      suites: { "deluxe": "Suíte Deluxe", "deluxe-executivo": "Suíte Deluxe Executivo", "conjugada": "Suíte Conjugada" },
       vantagens: [
         "Café da manhã estilo brunch incluso",
         "Late checkout até 14h, sem custo, reservando direto",
@@ -432,6 +437,12 @@ var QUIZ_FERIADOS = [
   var reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var FIXA = window.UNIDADE_URL;
+  /* ?suite=master: o visitante veio do botão "Reservar" de uma suíte. Vai na
+     mensagem do WhatsApp; só nomes da lista acima, nunca o texto da URL. */
+  var SUITE = (function () {
+    var s = new URLSearchParams(location.search).get("suite"), l = FIXA && UNIDADES[FIXA].suites;
+    return l && s && Object.prototype.hasOwnProperty.call(l, s) ? l[s] : null;
+  })();
   var ORDEM = (FIXA ? [] : ["unidade"]).concat(["periodo", "pessoas", "quando", "valor"]);
   var PERGUNTAS = ORDEM.length - 1;
 
@@ -531,7 +542,7 @@ var QUIZ_FERIADOS = [
 
   function registrar(dados) {
     dados.site = "big-bear";
-    dados.pagina = "orcamento";
+    dados.pagina = "quiz";
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(dados);
     if (location.hostname === "localhost") console.info("[analytics]", dados.event, dados);
@@ -1134,6 +1145,7 @@ var QUIZ_FERIADOS = [
   function mensagem(u, qualificado) {
     var l = ["Olá! Fiz o quiz de orçamento no site.", ""];
     l.push("*Pousada:* " + UNIDADES[u].nome);
+    if (SUITE) l.push("*Suíte:* " + SUITE);
     l.push("*Quando:* " + textoPeriodo(true));
     l.push("*Datas:* " + textoDatas());
     l.push("*Pessoas:* " + PESSOAS[estado.pessoas]);
@@ -1157,7 +1169,7 @@ var QUIZ_FERIADOS = [
   function montarPronto() {
     var us = unidadesEmJogo();
     var itens = [
-      ["Pousada", us.length > 1 ? "Ainda escolhendo entre as duas" : UNIDADES[us[0]].nome],
+      ["Pousada", us.length > 1 ? "Ainda escolhendo entre as duas" : UNIDADES[us[0]].nome + (SUITE ? ", " + SUITE : "")],
       ["Quando", textoPeriodo(false)],
       ["Datas", textoDatas()],
       ["Pessoas", PESSOAS[estado.pessoas]]
@@ -1198,7 +1210,7 @@ var QUIZ_FERIADOS = [
   ir(ORDEM[0], { historico: false, focar: false });
 })();
 </script>
-<script>window.PAGINA = { id: "orcamento", unidade: window.UNIDADE_URL };</script>
+<script>window.PAGINA = { id: "quiz", unidade: window.UNIDADE_URL };</script>
 <script src="/assets/site.js" defer></script>
 </body>
 </html>

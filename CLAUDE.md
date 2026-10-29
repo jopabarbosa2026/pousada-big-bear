@@ -7,7 +7,8 @@ Site estático de três páginas, publicado na Vercel em
 index.html        home da marca, apresenta as duas pousadas
 big-bear-1.html   /big-bear-1 — Av. Antonio Nicola Padula, 141
 big-bear-2.html   /big-bear-2 — Av. Emílio Ribas, 1074
-orcamento.html    /orcamento — quiz que filtra o visitante antes do WhatsApp
+quiz.html         /quiz — quiz de orçamento que filtra o visitante antes do WhatsApp
+                  (/orcamento não tem arquivo: é a home, por rewrite no vercel.json)
 assets/estilo.css CSS das três páginas
 assets/site.js    carrosséis, galeria, lightbox, menu e rastreio de cliques
 fotos/otim/       fotos antigas da Big Bear 1 (hero e seções), em AVIF e WebP
@@ -93,16 +94,37 @@ condição na variável de camada de dados `unidade`.
 
 Cada evento leva também `local` (qual botão, vem do `data-cta`) e `pagina`.
 
-## Quiz de orçamento (`/orcamento`)
+## Funil dos anúncios do Meta: `/orcamento` → `/quiz`
 
-Página de funil para os anúncios, fora da busca orgânica (`noindex`). Pergunta
+**O site principal não leva ao quiz.** Home, `/big-bear-1` e `/big-bear-2`
+abrem o WhatsApp direto, como sempre — mexer nisso muda as conversões das
+campanhas do Google Ads (pedido do João, 2026-10-29).
+
+O funil é um endereço à parte, para os anúncios do Meta:
+
+- **`/orcamento`** é a própria home (`index.html`) servida com outro endereço
+  pelo `rewrites` do `vercel.json`, com `X-Robots-Tag: noindex` — não há
+  arquivo próprio, então a cópia nunca fica desatualizada. O canonical da home
+  aponta para `/`.
+- `assets/site.js` liga o "funil" quando a página é `/orcamento` e guarda isso
+  no `sessionStorage` (`bb-funil`): ali e nas páginas que o visitante abrir
+  depois na mesma aba, todo botão de WhatsApp vira
+  `/quiz?unidade=<unidade>` (os de suíte com `&suite=<slug>`) e o clique sai
+  como `clique_quiz`. Botão novo de WhatsApp é pego automaticamente; botão de
+  suíte novo precisa entrar em `SUITE_DO_BOTAO` (site.js) e em
+  `UNIDADES[...].suites` (quiz.html).
+- No dataLayer, a home aberta por `/orcamento` sai com `pagina: "orcamento"`.
+
+## Quiz de orçamento (`/quiz`)
+
+Página do funil, fora da busca orgânica (`noindex`). Pergunta
 pousada, período (fim de semana, dias de semana, feriado), número de pessoas e
 datas (ou qual feriado), mostra o valor e pergunta se ele faz sentido. Só quem diz que
 sim recebe o WhatsApp em destaque, com a mensagem já preenchida com as
 respostas — a IA e a equipe não precisam perguntar de novo. Quem escolheu fim
 de semana e achou caro recebe a oferta de dias de semana antes de sair.
 
-- **Valores:** bloco `QUIZ_VALORES` no fim de `orcamento.html` — diária de
+- **Valores:** bloco `QUIZ_VALORES` no fim de `quiz.html` — diária de
   semana, pacote de fim de semana por mês (`"aaaa-mm"`) e valor de cada
   feriado; as noites de cada feriado ficam em `QUIZ_FERIADOS`. Vêm do plano
   tarifário da pousada (só a coluna "Tarifa", nunca a "Mínima"). O que falta
@@ -113,11 +135,12 @@ de semana e achou caro recebe a oferta de dias de semana antes de sair.
   em celular configurado em inglês.
 - **Fatos por unidade:** objeto `UNIDADES` no mesmo script. Só entra fato
   confirmado em `docs/`.
-- **Link por conta de Ads:** `/orcamento?unidade=big-bear-1` ou
-  `?unidade=big-bear-2` pula a pergunta da pousada.
+- **Unidade e suíte:** `/quiz?unidade=big-bear-1` ou `?unidade=big-bear-2`
+  pula a pergunta da pousada; `&suite=master` (só slugs da lista) põe a suíte
+  na mensagem do WhatsApp.
 - **dataLayer:** `quiz_resposta` (a cada resposta), `quiz_valor` (viu a
   faixa), `quiz_resultado` com `quiz_qualificado` `"sim"`/`"nao"`. O clique
   no WhatsApp sai como o `clique_whatsapp` de sempre, com `local`
-  `quiz-qualificado` ou `quiz-fora-da-faixa`. A conversão do Ads para esta
-  página deve contar só `quiz-qualificado` — é isso que ensina o lance
+  `quiz-qualificado` ou `quiz-fora-da-faixa`. Uma conversão montada para o
+  funil deve contar só `quiz-qualificado` — é isso que ensina o lance
   automático a buscar gente que aceita o preço.

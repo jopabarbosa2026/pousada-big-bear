@@ -193,9 +193,9 @@ página mantém o número da sua própria unidade.
 
 ---
 
-# Valores do quiz (`/orcamento`) — as duas unidades
+# Valores do quiz (`/quiz`) — as duas unidades
 
-O quiz de orçamento (`orcamento.html`) mostra o valor antes de o visitante
+O quiz de orçamento (`quiz.html`) mostra o valor antes de o visitante
 chamar no WhatsApp. Os números ficam no bloco `QUIZ_VALORES` (e as datas dos
 feriados em `QUIZ_FERIADOS`), no fim do arquivo. Onde não há número, o quiz
 mostra "valor sob consulta" — nunca estima.
