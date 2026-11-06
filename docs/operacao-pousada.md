@@ -212,6 +212,10 @@ mostra "valor sob consulta" — nunca estima.
   BB1 R$ 390, BB2 R$ 420; dezembro R$ 590 e R$ 540), e o João preferiu manter
   os R$ 350. Em dezembro, janeiro, abril, maio e junho isso fica abaixo da
   "Mínima" do plano — foi uma escolha consciente.
+- **A partir da 2ª noite de semana: R$ 300** (João, 2026-11-06). A 1ª noite
+  de domingo a quinta continua R$ 350; cada noite seguinte de domingo a
+  quinta sai R$ 300, nas duas pousadas, para o casal. Ex.: 2 noites R$ 650;
+  5 noites, de domingo a sexta, R$ 1.550.
 - **O hóspede vê só a coluna "Tarifa".** A "Mínima" é margem de negociação da
   equipe e não aparece no quiz.
 - **Só casal (1 ou 2 pessoas) tem valor.** 3, 4 ou mais pessoas: sob consulta.
@@ -248,9 +252,9 @@ do plano:
 noite de feriado, vale o valor do feriado. As noites que contam são uma
 escolha do quiz, não do plano: Natal 24 e 25/12; Ano Novo 31/12; Carnaval 6,
 7 e 8/02/2027; Páscoa 25, 26 e 27/03/2027; Tiradentes 20 e 21/04/2027;
-Corpus Christi 26 a 29/05/2027. Fora disso, cada noite de domingo a quinta
-conta R$ 350 e cada fim de semana completo (sexta **e** sábado) conta o
-pacote do mês. Com só uma das duas noites do fim de semana, o quiz mostra o
+Corpus Christi 26 a 29/05/2027. Fora disso, a 1ª noite de domingo a quinta
+da estadia conta R$ 350, as outras noites de domingo a quinta contam R$ 300
+e cada fim de semana completo (sexta **e** sábado) conta o pacote do mês. Com só uma das duas noites do fim de semana, o quiz mostra o
 pacote e diz que a equipe confirma o valor.
 
 **Pendente com o João:**
@@ -264,6 +268,11 @@ pacote e diz que a equipe confirma o valor.
 4. Quais noites cada pacote de feriado cobre (a lista acima é provisória).
 5. 3 e 4 pessoas: o plano só cita "+50% de cama extra" no Natal e no Ano Novo
    da Big Bear 2. Vale para o ano todo?
+6. Estadia que junta fim de semana e dias de semana: os R$ 300 contam a
+   partir da 2ª noite **de semana** ou da 2ª noite da estadia? O quiz usa a
+   primeira leitura, que dá o valor maior. Ex.: sexta a segunda = pacote do
+   fim de semana + R$ 350 pela noite de domingo (seria R$ 300 na outra
+   leitura).
 
 Ao trocar a tabela (nova temporada, novo plano), atualize `QUIZ_VALORES`,
 `QUIZ_FERIADOS` e esta seção, com a data e quem passou.

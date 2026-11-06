@@ -10,7 +10,7 @@ big-bear-2.html   /big-bear-2 — Av. Emílio Ribas, 1074
 quiz.html         /quiz — quiz de orçamento que filtra o visitante antes do WhatsApp
 orcamento.html    /orcamento — CÓPIA EXATA de index.html (npm run orcamento), home dos anúncios do Meta
 romantico.html    /romantico — GERADA da home (npm run campanhas): campanha Google Ads, viagem a dois
-meio-de-semana.html /meio-de-semana — GERADA da home (npm run campanhas): R$ 350 de domingo a quinta
+meio-de-semana.html /meio-de-semana — GERADA da home (npm run campanhas): domingo a quinta, R$ 350 a 1ª noite e R$ 300 a partir da 2ª
 assets/lp.css     peças extras das páginas de campanha (bloco de preço, faixa de fotos)
 assets/estilo.css CSS das três páginas
 assets/site.js    carrosséis, galeria, lightbox, menu e rastreio de cliques
@@ -151,7 +151,8 @@ de semana e achou caro recebe a oferta de dias de semana antes de sair.
 ## Páginas de campanha do Google Ads (`/romantico`, `/meio-de-semana`)
 
 Criadas em 2026-10-29 para anúncios do Google: uma de viagem a dois e uma da
-diária de R$ 350 de domingo a quinta. **São a própria home** com poucos
+diária de domingo a quinta (R$ 350 a 1ª noite, R$ 300 a partir da 2ª desde
+2026-11-06). **São a própria home** com poucos
 detalhes trocados — o João achou feia a primeira versão, com layout próprio,
 e pediu "se inspire no original, mude apenas alguns detalhes".
 
@@ -167,8 +168,10 @@ e pediu "se inspire no original, mude apenas alguns detalhes".
 - Só fato confirmado em `docs/operacao-pousada.md`. Da Big Bear 1, na
   oferta, entram só a hidromassagem da Suíte Master (João, 2026-10-29) e a
   academia e a sauna.
-- O valor de R$ 350 está no script (e as contas de 2 a 5 noites). Se a
-  diária de semana mudar, troque lá **e** em `QUIZ_VALORES` do quiz.
+- A diária de semana está no script (`SEMANA_1A` = 1ª noite, `SEMANA_DEMAIS`
+  = a partir da 2ª), que calcula sozinho as contas de 2 a 5 noites. Se ela
+  mudar, troque lá **e** em `QUIZ_VALORES` do quiz (`semana` e
+  `semanaDemais`).
 - Fotos reais do arquivo (`fotos/gal/`). Não há foto com pessoas: o João quer
   casal nas fotos (vinho, banheira com rosas). Quando chegarem, entram pelo
   fluxo normal de fotos e trocam as da lista `slides` e da oferta no script.

@@ -1,6 +1,6 @@
 // Gera as páginas de campanha do Google Ads a partir da home (index.html):
 //   romantico.html       /romantico       viagem a dois
-//   meio-de-semana.html  /meio-de-semana  R$ 350 de domingo a quinta
+//   meio-de-semana.html  /meio-de-semana  domingo a quinta: R$ 350 a 1ª noite, R$ 300 a partir da 2ª
 //
 // Elas SÃO a home — mesmo topo, menu, cartões, galeria, depoimentos e rodapé —
 // com poucos detalhes trocados: título, texto e fotos do topo, uma seção de
@@ -13,10 +13,17 @@
 // trecho sumir, o script para com erro em vez de gerar página quebrada.
 //
 // Fatos: só os de docs/operacao-pousada.md. Hidromassagem da Suíte Master da
-// Big Bear 1 confirmada pelo João em 2026-10-29. R$ 350 também está em
-// QUIZ_VALORES (quiz.html) — se mudar, mude nos dois.
+// Big Bear 1 confirmada pelo João em 2026-10-29.
 const fs = require('fs');
 const path = require('path');
+
+/* Diária de domingo a quinta, para o casal, nas duas pousadas: a 1ª noite e
+   cada noite a partir da 2ª (João, 2026-11-06). As contas de 2 a 5 noites
+   saem daqui. Também em QUIZ_VALORES (quiz.html) — se mudar, mude nos dois. */
+const SEMANA_1A = 350;
+const SEMANA_DEMAIS = 300;
+const reais = n => 'R$ ' + n.toLocaleString('pt-BR');
+const totalSemana = n => SEMANA_1A + (n - 1) * SEMANA_DEMAIS;
 
 const REPO = path.join(__dirname, '..');
 const URL_BASE = 'https://www.pousadabigbear.com.br';
@@ -58,14 +65,13 @@ const ICONE = {
 function blocoPreco(rotulo, texto, botoes) {
   return '<section class="sec-pad lp-oferta-preco">\n  <div class="wrap">\n    <div class="lp-preco reveal">\n      <div>\n' +
     '        <p class="lp-rot">' + rotulo + '</p>\n' +
-    '        <p class="lp-num">R$ 350 <small>por noite</small></p>\n' +
+    '        <p class="lp-num">' + reais(SEMANA_1A) + ' <small>a 1ª noite</small></p>\n' +
+    '        <p class="lp-depois">A partir da 2ª noite, <b>' + reais(SEMANA_DEMAIS) + '</b> por noite.</p>\n' +
     '        <p>' + texto + '</p>\n' +
     '        <p class="lp-nota">Para 1 ou 2 pessoas; com 3 ou mais, a equipe passa o valor. Noites de sexta e sábado e feriados têm valor próprio.</p>\n' +
     '      </div>\n      <div>\n        <div class="lp-noites">\n' +
-    '          <div><span>2 noites</span><b>R$ 700</b></div>\n' +
-    '          <div><span>3 noites</span><b>R$ 1.050</b></div>\n' +
-    '          <div><span>4 noites</span><b>R$ 1.400</b></div>\n' +
-    '          <div><span>5 noites, domingo a sexta</span><b>R$ 1.750</b></div>\n' +
+    [2, 3, 4].map(n => '          <div><span>' + n + ' noites</span><b>' + reais(totalSemana(n)) + '</b></div>\n').join('') +
+    '          <div><span>5 noites, domingo a sexta</span><b>' + reais(totalSemana(5)) + '</b></div>\n' +
     '        </div>\n        <div class="lp-acoes">\n          ' + botoes.join('\n          ') + '\n        </div>\n      </div>\n    </div>\n  </div>\n</section>\n';
 }
 
@@ -126,15 +132,15 @@ const PAGINAS = [
   {
     arquivo: 'meio-de-semana.html', id: 'meio-de-semana',
     titulo: 'R$ 350 a diária de domingo a quinta em Campos do Jordão — Pousada Big Bear',
-    descricao: 'Diária de R$ 350 para o casal, de domingo a quinta, nas pousadas Big Bear, na Vila Capivari, a poucos passos das principais atrações de Campos do Jordão.',
+    descricao: 'Diária de R$ 350 para o casal, de domingo a quinta, e R$ 300 a partir da 2ª noite, nas pousadas Big Bear, na Vila Capivari, a poucos passos das principais atrações de Campos do Jordão.',
     mensagem: MSG_SEMANA,
     eyebrow: 'Domingo a quinta · Campos do Jordão',
     h1: 'Campos do Jordão de domingo a quinta por <em>R$ 350</em>.',
-    lead: 'Diária fixa para o casal nas duas pousadas, na Vila Capivari, a poucos passos das principais atrações.',
+    lead: 'E a partir da 2ª noite, ' + reais(SEMANA_DEMAIS) + '. Para o casal, nas duas pousadas, na Vila Capivari, a poucos passos das principais atrações.',
     acao: 'Ver os valores',
-    seloN: 'R$ 350<small> /noite</small>',
-    seloLbl: 'para o casal, de domingo a quinta, nas duas pousadas. Feriados têm valor próprio.',
-    seloMini: ['<div><b>R$ 700</b><span>2 noites</span></div>', '<div><b>R$ 1.750</b><span>5 noites, domingo a sexta</span></div>'],
+    seloN: reais(SEMANA_1A) + '<small> a 1ª noite</small>',
+    seloLbl: 'para o casal, de domingo a quinta, nas duas pousadas. A partir da 2ª noite, ' + reais(SEMANA_DEMAIS) + '. Feriados têm valor próprio.',
+    seloMini: ['<div><b>' + reais(totalSemana(2)) + '</b><span>2 noites</span></div>', '<div><b>' + reais(totalSemana(5)) + '</b><span>5 noites, domingo a sexta</span></div>'],
     slides: null, // mantém as fotos do topo da home
     finalH2: 'Domingo a quinta <em>te espera</em>.',
     oferta: () =>
@@ -145,7 +151,7 @@ const PAGINAS = [
       '\n<section class="amen sec-pad">\n  <div class="wrap">\n    <div class="sec-head reveal">\n      <span class="eyebrow">Por que vir durante a semana</span>\n' +
       '      <h2>A mesma serra, com mais <em>espaço para você</em></h2>\n    </div>\n    <div class="amen-grid reveal">\n' +
       [cartao(ICONE.calma, 'Cidade mais tranquila', 'Fora do fim de semana, a Vila Capivari tem menos movimento: passeio no seu ritmo e menos espera nos restaurantes.'),
-       cartao(ICONE.etiqueta, 'Valor fixo', 'R$ 350 por noite para o casal, nas duas pousadas, todas as noites de domingo a quinta.'),
+       cartao(ICONE.etiqueta, 'Mais noites, menos por noite', 'R$ 350 a primeira noite e R$ 300 a partir da segunda, para o casal, nas duas pousadas, de domingo a quinta.'),
        cartao(ICONE.relogio, 'Saída sem pressa', 'Na Big Bear 2, late checkout até as 14h, sem custo, reservando direto.'),
        cartao(ICONE.academia, 'Academia e sauna', 'Ficam na Big Bear 1 e são de uso comum: hóspedes da Big Bear 2 usam sem agendamento e sem custo.')].join('\n') +
       '\n    </div>\n  </div>\n</section>\n\n'

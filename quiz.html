@@ -354,6 +354,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      equipe e não aparece para o hóspede.
    - semana: diária de domingo a quinta. R$ 350 o ano todo, por decisão do
      João (2026-10-29) — o plano traz outro valor por mês, que fica de fora.
+   - semanaDemais: cada noite de domingo a quinta a partir da 2ª, R$ 300
+     (João, 2026-11-06). Sem ele, todas as noites saem pela "semana".
    - fds: pacote de 2 diárias (noites de sexta e sábado), por mês "aaaa-mm".
      Mês que não está aqui (jul a set/2027) = sob consulta.
    - feriados: valor para 3 diárias. null = sob consulta.
@@ -361,6 +363,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 var QUIZ_VALORES = {
   "big-bear-1": {
     semana: 350,
+    semanaDemais: 300,
     fds: {
       "2026-10": 1400, "2026-11": 1600, "2026-12": 1900, "2027-01": 1700, "2027-02": 1400,
       "2027-03": 1100, "2027-04": 1500, "2027-05": 2000, "2027-06": 2200
@@ -372,6 +375,7 @@ var QUIZ_VALORES = {
   },
   "big-bear-2": {
     semana: 350,
+    semanaDemais: 300,
     fds: {
       "2026-10": 1680, "2026-11": 1700, "2026-12": 1800, "2027-01": 1770, "2027-02": 1390,
       "2027-03": 1320, "2027-04": 1660, "2027-05": 1800, "2027-06": 2600
@@ -515,9 +519,22 @@ var QUIZ_FERIADOS = [
     return null;
   }
 
+  function tabela(u) { return (window.QUIZ_VALORES || {})[u] || {}; }
+  /* n noites de domingo a quinta: a 1ª pela "semana", as outras pela
+     "semanaDemais" */
+  function valorSemana(t, n) {
+    var demais = t.semanaDemais > 0 ? t.semanaDemais : t.semana;
+    return n > 0 ? t.semana + (n - 1) * demais : 0;
+  }
+  /* valor das noites de semana a partir da 2ª, quando é diferente da 1ª */
+  function semanaDepois(u) {
+    var t = tabela(u);
+    return t.semanaDemais > 0 && t.semanaDemais !== t.semana ? t.semanaDemais : 0;
+  }
+
   /* Valor que o quiz pode mostrar, como [menor, maior] — os dois iguais quando
      o valor é um só. null = sob consulta. Só casal tem valor na tabela.
-     semana: por noite · fds: pacote de 2 diárias · feriado: 3 diárias. */
+     semana: a 1ª noite · fds: pacote de 2 diárias · feriado: 3 diárias. */
   function faixa(u, p) {
     if (estado.pessoas !== "2") return null;
     var t = (window.QUIZ_VALORES || {})[u] || {}, v;
@@ -896,11 +913,12 @@ var QUIZ_FERIADOS = [
   }
 
   /* Total das datas, só quando dá para somar sem estimar: noites de domingo a
-     quinta pela diária e cada fim de semana completo (sexta E sábado) pelo
+     quinta pela diária (a 1ª delas por "semana", as outras por
+     "semanaDemais") e cada fim de semana completo (sexta E sábado) pelo
      pacote do mês. Fim de semana pela metade = null, a equipe calcula. */
   function totalEstadia(u) {
     if (estado.pessoas !== "2") return null;
-    var t = (window.QUIZ_VALORES || {})[u] || {}, ns = noites(), total = 0;
+    var t = tabela(u), ns = noites(), total = 0, nSemana = 0;
     for (var i = 0; i < ns.length; i++) {
       var dia = ns[i].getDay();
       if (dia === 5) {
@@ -912,10 +930,10 @@ var QUIZ_FERIADOS = [
         return null;               // sábado sem a sexta
       } else {
         if (!(t.semana > 0)) return null;
-        total += t.semana;
+        nSemana++;
       }
     }
-    return total;
+    return total + valorSemana(t, nSemana);
   }
   function fdsIncompleto() {
     var ns = noites();
@@ -923,16 +941,21 @@ var QUIZ_FERIADOS = [
   }
 
   /* linha extra sob o valor: o total das datas escolhidas ou, na diária de
-     semana, quanto saem 2 diárias — para comparar com o pacote do fim de semana */
+     semana, quanto saem 2 diárias — para comparar com o pacote do fim de semana.
+     Na diária de semana vem antes o valor a partir da 2ª noite. */
   function complemento(u, p, f, comTotal) {
     if (!f) return "";
-    var n = estado.quando === "datas" ? noites().length : 0;
+    var n = estado.quando === "datas" ? noites().length : 0, extra = "";
     if (comTotal && n && p === estado.periodoFinal && p !== "feriado") {
       var t = totalEstadia(u);
       /* só um fim de semana: o total é o próprio pacote, não repete */
-      return t && n > 1 && !(f[0] === f[1] && t === f[0]) ? "Total para " + n + " noites: " + reais(t) : "";
+      if (t && n > 1 && !(f[0] === f[1] && t === f[0])) extra = "Total para " + n + " noites: " + reais(t);
+    } else if (p === "semana" && f[0] === f[1]) {
+      extra = "2 diárias: " + reais(valorSemana(tabela(u), 2));
     }
-    return p === "semana" && f[0] === f[1] ? "2 diárias: " + reais(f[0] * 2) : "";
+    var depois = p === "semana" ? semanaDepois(u) : 0;
+    if (depois) extra = "A partir da 2ª noite, " + reais(depois) + (extra ? "<br>" + extra : "");
+    return extra;
   }
 
   function rotuloCartao(p) {
@@ -946,7 +969,7 @@ var QUIZ_FERIADOS = [
   }
   function rodapeCartao(p) {
     var quem = PARA_PESSOAS[estado.pessoas];
-    if (p === "semana") return "Por noite, " + quem + ".";
+    if (p === "semana") return (AS_DUAS.some(semanaDepois) ? "Valor da 1ª noite, " : "Por noite, ") + quem + ".";
     if (p === "fds") return "Pacote de 2 diárias (sexta e sábado), " + quem + ".";
     return "Valor das 3 diárias, " + quem + ".";
   }
@@ -1135,7 +1158,7 @@ var QUIZ_FERIADOS = [
     var t = estado.quando === "datas" && !estado.foiParaSemana && p !== "feriado" && noites().length > 1 ? totalEstadia(u) : null;
     if (t) return reais(t) + " no total, para " + noites().length + " noites";
     return textoFaixa(f) + (
-      p === "semana" ? " por noite" :
+      p === "semana" ? (semanaDepois(u) ? " a 1ª noite e " + reais(semanaDepois(u)) + " a partir da 2ª" : " por noite") :
       p === "fds" ? " o fim de semana (2 diárias)" + (f[0] !== f[1] ? ", conforme o mês" : "") :
       " o feriado (3 diárias)");
   }

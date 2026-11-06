@@ -15,6 +15,8 @@
 .lp-preco p{color:rgba(246,241,231,.85);line-height:1.6}
 .lp-preco p.lp-num{color:#fff;line-height:1}
 .lp-preco p.lp-rot{color:#e9c9ac}
+.lp-preco p.lp-depois{font-family:var(--serif);font-size:1.45rem;line-height:1.25;color:#fff;margin:0 0 12px}
+.lp-depois b{font-weight:500;color:#e9c9ac;white-space:nowrap}
 .lp-nota{font-size:.82rem;margin-top:14px;color:rgba(246,241,231,.62) !important}
 .lp-noites{display:grid;gap:8px}
 .lp-noites div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
